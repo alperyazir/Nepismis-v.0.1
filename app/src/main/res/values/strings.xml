@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Ne Pişmiş</string>
+    <string name="main_activity_name">Kullanıcı Giriş</string>
+    <string name="btn_str_cook">Aşçı</string>
+    <string name="btn_str_market">Market</string>
+    <string name="btn_str_courier">Kurye</string>
+    <string name="title_activity_cook_">Cook_Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_cook">CookActivity</string>
+</resources>

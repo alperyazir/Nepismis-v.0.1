@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_order"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Siparişler" />
+        <item
+            android:id="@+id/nav_menu_on_order"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Satıştaki Menüler" />
+        <item
+            android:id="@+id/nav_do_sale"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Satışa Koy" />
+        <item
+            android:id="@+id/nav_questionnaire"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Anketlerim" />
+        <item
+            android:id="@+id/nav_make_questionnaire"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Anket Oluştur" />
+        <item
+            android:id="@+id/nav_my_account"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Profilim" />
+    </group>
+
+    <item android:title="Accout">
+        <menu>
+            <item
+                android:id="@+id/nav_help"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Help" />
+            <item
+                android:id="@+id/nav_sign_out"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Sign Out" />
+            <item
+                android:id="@+id/nav_about"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="About" />
+        </menu>
+    </item>
+
+</menu>
