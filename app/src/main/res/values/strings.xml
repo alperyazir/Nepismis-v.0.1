@@ -11,4 +11,7 @@
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_cook">CookActivity</string>
+    <string name="cook_activity_name">Siparişler</string>
+
+    <string name="account_activity_name">Hesabım</string>
 </resources>

@@ -33,8 +33,10 @@ public class CookActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setIcon(R.drawable.ne_pismis);
+        setTitle(R.string.cook_activity_name);
+
+  //        getSupportActionBar().setDisplayShowHomeEnabled(true);
+  //      getSupportActionBar().setIcon(R.drawable.ne_pismis);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -86,7 +88,7 @@ public class CookActivity extends AppCompatActivity
         } else if (id == R.id.nav_make_questionnaire) {
 
         } else if (id == R.id.nav_my_account) {
-            //startActivity(new Intent(this, AccountActivity.class));
+            startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_help) {
 
         } else if (id == R.id.nav_sign_out) {
