@@ -25,6 +25,6 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     public void btn_comment_clicked(View view){
-        //startActivity(new Intent(this,CommentActivity.class));
+        startActivity(new Intent(this,CommentsActivity.class));
     }
 }

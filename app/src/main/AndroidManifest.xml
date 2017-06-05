@@ -22,7 +22,8 @@
             android:label="@string/title_activity_cook"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ProfileActivity" />
-        <activity android:name=".AccountActivity"></activity>
+        <activity android:name=".AccountActivity" />
+        <activity android:name=".CommentsActivity"></activity>
     </application>
 
 </manifest>

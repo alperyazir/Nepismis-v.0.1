@@ -8,4 +8,8 @@
     <color name="colorMarket">#FF1A30</color>
     <color name="colorCourier">#FF4045</color>
     <color name="colorGreen">#00953F</color>
+    <color name="colorToggleOn">#FF2957</color>
+    <color name="colorToggleOff">#F2A0B4</color>
+    <color name="colorRatingStarActive">#FFEC00</color>
+    <color name="colorRatingStarDeactive">#FFEC00</color>
 </resources>

@@ -14,4 +14,9 @@
     <string name="cook_activity_name">Siparişler</string>
 
     <string name="account_activity_name">Hesabım</string>
+    <string name="account_activity_today">Bugün</string>
+    <string name="account_activity_month">Bu Ay</string>
+    <string name="account_activity_total">Toplam</string>
+
+    <string name="comment_activity_name">Yorumlar</string>
 </resources>
