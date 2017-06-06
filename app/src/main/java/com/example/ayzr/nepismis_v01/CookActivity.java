@@ -71,6 +71,11 @@ public class CookActivity extends AppCompatActivity
         }
    }
 
+    public void button_cook_order_ready_clicked(View view){
+        /// TODO
+        /// Add codes what happened when order ready
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

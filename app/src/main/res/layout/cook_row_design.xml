@@ -180,15 +180,17 @@
             android:orientation="vertical">
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/button_cook_order_ready"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="4dp"
                 android:layout_weight="1"
-                android:background="#F39F9D"
+                android:background="@drawable/account_toogle_off"
+                android:onClick="button_cook_order_ready_clicked"
                 android:text="Sipariş\nHazır"
                 android:textAllCaps="false"
-                android:layout_marginLeft="4dp"
-                android:textColor="@android:color/white" />
+                android:textColor="@android:color/white"
+                android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 
