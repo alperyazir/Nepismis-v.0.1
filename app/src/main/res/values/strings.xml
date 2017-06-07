@@ -19,4 +19,6 @@
     <string name="account_activity_total">Toplam</string>
 
     <string name="comment_activity_name">Yorumlar</string>
+
+    <string name="put_on_sale_activity_name">Satışa Koy</string>
 </resources>

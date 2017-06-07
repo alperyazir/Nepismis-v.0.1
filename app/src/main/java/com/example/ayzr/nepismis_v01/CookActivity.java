@@ -86,7 +86,8 @@ public class CookActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_menu_on_order) {
 
-        } else if (id == R.id.nav_do_sale) {
+        } else if (id == R.id.nav_put_on_sale) {
+            startActivity(new Intent(this,PutOnSaleActivity.class));
 
         } else if (id == R.id.nav_questionnaire) {
 

@@ -10,4 +10,5 @@
             android:topLeftRadius="10dp"/>
     </shape>
 </item>
+<item android:drawable="@drawable/decrease" />
 </layer-list>
