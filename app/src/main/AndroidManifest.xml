@@ -25,7 +25,10 @@
         <activity android:name=".AccountActivity" />
         <activity android:name=".CommentsActivity" />
         <activity android:name=".QuestionnaireActivity" />
-        <activity android:name=".PutOnSaleActivity"></activity>
+        <activity android:name=".PutOnSaleActivity" />
+        <activity android:name=".MenusActivity" />
+        <activity android:name=".RequestService" />
+        <activity android:name=".OrdersOnSale"></activity>
     </application>
 
 </manifest>

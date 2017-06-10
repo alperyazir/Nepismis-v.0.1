@@ -1,0 +1,85 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.ayzr.nepismis_v01.MenusFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cook_order_list_row_design"
+        android:orientation="horizontal"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <ImageView
+                android:id="@+id/image_put_on_sale_cook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:src="@mipmap/ic_launcher_ne_pismis"
+                tools:layout_editor_absoluteX="8dp"
+                tools:layout_editor_absoluteY="108dp" />
+
+            <RatingBar
+                android:id="@+id/rating_put_on_sale"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:numStars="5"
+                android:rating="5"
+                android:stepSize=".1" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="8dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/comments_row_design"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/text_put_on_sale_menu_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Karnıyarık" />
+
+                <TextView
+                    android:id="@+id/text_put_on_sale_evening_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Pilav" />
+
+                <TextView
+                    android:id="@+id/text_put_on_sale_menu_3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Cacık" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/text_put_on_sale_vote_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="14 oy" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</FrameLayout>

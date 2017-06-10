@@ -85,7 +85,7 @@ public class CookActivity extends AppCompatActivity
         if (id == R.id.nav_order) {
             // Handle the camera action
         } else if (id == R.id.nav_menu_on_order) {
-
+            startActivity(new Intent(this, OrdersOnSale.class));
         } else if (id == R.id.nav_put_on_sale) {
             startActivity(new Intent(this,PutOnSaleActivity.class));
 
@@ -101,7 +101,12 @@ public class CookActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_about) {
 
+        } else if (id == R.id.nav_menus){
+            startActivity(new Intent(this,MenusActivity.class));
+        } else if (id == R.id.nav_request_service){
+            startActivity(new Intent(this,RequestService.class));
         }
+
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

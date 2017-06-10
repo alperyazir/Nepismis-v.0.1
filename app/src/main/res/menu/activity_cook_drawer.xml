@@ -23,6 +23,14 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Anket Oluştur" />
         <item
+            android:id="@+id/nav_menus"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Menulerim" />
+        <item
+            android:id="@+id/nav_request_service"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Servis İste" />
+        <item
             android:id="@+id/nav_my_account"
             android:icon="@drawable/ic_menu_manage"
             android:title="Profilim" />
