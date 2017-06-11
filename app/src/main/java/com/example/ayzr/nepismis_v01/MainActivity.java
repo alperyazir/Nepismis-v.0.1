@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void button_market_clicked(View view){
-        startActivity(new Intent(this,LoginActivity.class));
+        startActivity(new Intent(this,CookActivity.class));
     }
 
     public void button_courier_clicked(View view){

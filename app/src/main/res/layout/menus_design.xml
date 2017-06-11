@@ -1,14 +1,13 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.example.ayzr.nepismis_v01.MenusFragment">
+    android:layout_height="match_parent">
 
-    <!-- TODO: Update blank fragment layout -->
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
         android:background="@drawable/cook_order_list_row_design"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="8dp"
@@ -16,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
@@ -43,7 +42,7 @@
 
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
@@ -61,7 +60,7 @@
                     android:text="Karnıyarık" />
 
                 <TextView
-                    android:id="@+id/text_put_on_sale_evening_2"
+                    android:id="@+id/text_put_on_sale_menu_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Pilav" />
@@ -73,13 +72,7 @@
                     android:text="Cacık" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/text_put_on_sale_vote_count"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="14 oy" />
-
         </LinearLayout>
 
     </LinearLayout>
-</FrameLayout>
+</LinearLayout>
