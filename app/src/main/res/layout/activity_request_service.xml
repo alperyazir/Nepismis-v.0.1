@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/editText_request_service"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -33,14 +33,15 @@
             tools:layout_editor_absoluteY="45dp" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/send_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/main_round_button_cook_design"
+            android:onClick="send_request_clicked"
             android:text="Gönder"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            tools:layout_editor_absoluteY="137dp"
-            android:background="@drawable/main_round_button_cook_design"/>
+            tools:layout_editor_absoluteY="137dp" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

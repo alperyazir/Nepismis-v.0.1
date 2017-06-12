@@ -90,7 +90,7 @@ public class CookActivity extends AppCompatActivity
             startActivity(new Intent(this,PutOnSaleActivity.class));
 
         } else if (id == R.id.nav_questionnaire) {
-
+            startActivity(new Intent(this,QuestionnaireActivity.class));
         } else if (id == R.id.nav_make_questionnaire) {
 
         } else if (id == R.id.nav_my_account) {

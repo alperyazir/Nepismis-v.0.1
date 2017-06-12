@@ -26,12 +26,12 @@
     <string name="title_noon">Öğle</string>
     <string name="title_evening">Akşam</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
     <string name="request_service_activity_name">Servis İste</string>
     <string name="orders_on_sale">Satıştaki Menüler</string>
 
 
     <string name="menus_activity_name">Menülerim</string>
+
+    <string name="profile_activity_name">Profilim</string>
+    <string name="questionaire_activty_name">Anketlerim</string>
 </resources>
