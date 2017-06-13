@@ -28,7 +28,9 @@
         <activity android:name=".PutOnSaleActivity" />
         <activity android:name=".MenusActivity" />
         <activity android:name=".RequestService" />
-        <activity android:name=".OrdersOnSale"></activity>
+        <activity android:name=".OrdersOnSale" />
+        <activity android:name=".CreateQuestionarieActivty" />
+        <activity android:name=".MenusDialogFragment"></activity>
     </application>
 
 </manifest>
