@@ -1,30 +1,39 @@
 package com.example.ayzr.nepismis_v01;
-
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String admin_mail = "alper@nepismis.com";
-    private String admin_pass = "12345";
-
     private EditText emailEditText;
     private EditText passEditText;
+    private boolean is_login;
+    private String username;
+    private String password;
+    private int user_id;
 
+    private ProgressDialog progress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         // Address the email and password field
         emailEditText = (EditText) findViewById(R.id.username);
         passEditText = (EditText) findViewById(R.id.password);
@@ -45,20 +54,9 @@ public class LoginActivity extends AppCompatActivity {
             passEditText.setError("Password cannot be empty");
         }
 
-        if(isValidEmail(email) && isValidPassword(pass))
-        {
-            // Validation Completed
-            if(email.equals(admin_mail) && pass.equals(admin_pass))
-            {
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
-                startActivity(new Intent(this,CookActivity.class));
-            }
-            else
-            {
-                Toast.makeText(getApplicationContext(),"Failed",Toast.LENGTH_LONG).show();
-            }
+        if(isValidEmail(email) && isValidPassword(pass)) {
+            try_login();
         }
-
     }
 
     // validating email id
@@ -78,4 +76,66 @@ public class LoginActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    private void try_login(){
+
+         if(!isNetworkAvailable()) {
+             Toast.makeText(getApplicationContext(),"No internet access!",Toast.LENGTH_SHORT).show();
+             return;
+         }
+        progress = new ProgressDialog(this);
+        progress.setMessage("Logging in ...");
+        progress.setIndeterminate(true);
+        progress.show();
+
+        HttpCall httpCall = new HttpCall();
+        httpCall.setMethodtype(HttpCall.GET);
+        httpCall.setUrl("http://nepismis.afakan.net/android/gonder");
+        HashMap<String,String> params = new HashMap<>();
+        params.put("name",emailEditText.getText().toString());
+        params.put("password",passEditText.getText().toString());
+        httpCall.setParams(params);
+        new HttpRequest(){
+            @Override
+            public void onResponse(String response) {
+                super.onResponse(response);
+                try {
+                    progress.dismiss();
+                    JSONObject obje = new JSONObject(response);
+                    is_login = obje.getBoolean("giris");
+                    JSONObject user = obje.getJSONObject("user");
+                    user_id = user.getInt("id");
+
+                    username = user.getString("email");
+                    password = user.getString("password");
+
+                    if(is_login){
+
+                        AccountDatabase db = new AccountDatabase(getApplicationContext());
+                        db.resetTables();
+                        db.kullaniciEkle(username, password, ""+user_id);
+
+                        startActivity(new Intent(getApplicationContext(),CookActivity.class));
+                        finish();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    if(!is_login){
+                        Toast.makeText(getApplicationContext(),"Başarısız!",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+        }.execute(httpCall);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+
+
 }
