@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -30,10 +30,9 @@
                 tools:layout_editor_absoluteY="108dp" />
 
             <RatingBar
-                android:id="@+id/rating_put_on_sale"
                 style="@style/Widget.AppCompat.RatingBar.Small"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:numStars="5"
                 android:rating="5"
@@ -41,15 +40,15 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:background="@drawable/comments_row_design"
                 android:orientation="vertical">
 
@@ -57,19 +56,28 @@
                     android:id="@+id/text_put_on_sale_menu_1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Karnıyarık" />
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="alperalperalperaaa"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/text_put_on_sale_menu_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Pilav" />
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="Pilav"
+                    android:textSize="14sp" />
 
                 <TextView
                     android:id="@+id/text_put_on_sale_menu_3"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Cacık" />
+                    android:layout_height="match_parent"
+                    android:gravity="center_horizontal"
+                    android:maxLines="1"
+                    android:text="Cacık"
+                    android:textSize="14sp" />z
             </LinearLayout>
 
         </LinearLayout>

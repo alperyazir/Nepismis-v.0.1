@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.URLUtil;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,9 +46,9 @@ public class CookListAdapter extends BaseAdapter {
     }
 
     @Override
-    public List<CookActivity.struct_order> getItem(int position) {
+    public CookActivity.struct_order getItem(int position) {
         //şöyle de olabilir: public Object getItem(int position)
-        return (List<CookActivity.struct_order>) mOrderList.get(position);
+        return mOrderList.get(position);
     }
 
     @Override
@@ -85,13 +86,11 @@ public class CookListAdapter extends BaseAdapter {
 
 
 
-        String url = "http://nepismis.afakan.net/images/yemek/kucuk/" + cook.order_picture_id +  ".jpg";
-
-        Picasso.with(mInflater.getContext()).load(url).fit().transform(transformation).into(order_image);
-
+        String url = "http://nepismis.afakan.net/images/yemek/" + cook.order_menu.order_picture_id +  ".jpg";
+        if(URLUtil.isValidUrl(url)) {
+            Picasso.with(mInflater.getContext()).load(url).into(order_image);
+        }
         return satirView;
     }
 
-
-
-}
+    }

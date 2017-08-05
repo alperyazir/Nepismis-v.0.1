@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -24,8 +25,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.os.Handler;
 
 import com.example.ayzr.nepismis_v01.adapters.CookListAdapter;
+import com.example.ayzr.nepismis_v01.adapters.MenusAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,16 +39,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Handler;
 
 public class CookActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    final List<String> kisiler=new ArrayList<String>();
     final List<struct_order> orders = new ArrayList<>();
     private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
     private long mBackPressed;
 
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private ProgressDialog progress;
 
@@ -58,9 +60,20 @@ public class CookActivity extends AppCompatActivity
 
         setTitle(R.string.cook_activity_name);
 
-  //        getSupportActionBar().setDisplayShowHomeEnabled(true);
-  //      getSupportActionBar().setIcon(R.drawable.ne_pismis);
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override public void run() {
+                        mSwipeRefreshLayout.setRefreshing(false);
+                        // burada ise Swipe Reflesh olduğunda ne yapacaksanız onu eklemeniz yeterlidir. Örneğin bir listeyi clear edebilir yada yeniden veri doldurabilirsiniz.
+                    }
+                }, 2000);
+            }
 
+        });
+        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -71,6 +84,11 @@ public class CookActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
+    }
+
+    private void parser(){
         if(isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking orders...");
@@ -109,7 +127,7 @@ public class CookActivity extends AppCompatActivity
                                 String str = json_menu.getString("yemek_adi");
                                 m.meal.add(j, str);
                                 if (j == 0)
-                                    o.order_picture_id = json_menu.getInt("yemek_id");
+                                    m.order_picture_id = json_menu.getInt("yemek_id");
                             }
                             JSONObject order_json = initial.getJSONObject("uye");
                             o.order_name = order_json.getString("name");
@@ -130,7 +148,6 @@ public class CookActivity extends AppCompatActivity
         } else {
             Toast.makeText(getApplicationContext(), "No internet access!", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     private void update_orders(List<struct_order> orders){
@@ -175,7 +192,7 @@ public class CookActivity extends AppCompatActivity
         } else if (id == R.id.nav_put_on_sale) {
             startActivity(new Intent(this,PutOnSaleActivity.class));
         } else if (id == R.id.nav_questionnaire) {
-            startActivity(new Intent(this,QuestionnaireActivity.class));
+            startActivity(new Intent(this,Survey_activity.class));
         } else if (id == R.id.nav_make_questionnaire) {
             startActivity(new Intent(this,CreateQuestionarieActivty.class));
         } else if (id == R.id.nav_my_account) {
@@ -192,7 +209,7 @@ public class CookActivity extends AppCompatActivity
         } else if (id == R.id.nav_about) {
 
         } else if (id == R.id.nav_menus){
-            startActivity(new Intent(this,MenusActivity.class));
+            startActivity(new Intent(this,ManuActivity.class));
         } else if (id == R.id.nav_request_service){
             startActivity(new Intent(this,RequestService.class));
         }
@@ -240,12 +257,13 @@ public class CookActivity extends AppCompatActivity
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public class struct_menu{
+    public static class struct_menu{
         public List<String> meal = new ArrayList<String>();
-    }
-    public class struct_order{
-        public String order_name;
         public int order_picture_id;
+
+    }
+    public static class struct_order{
+        public String order_name;
         public struct_menu order_menu;
         public int order_count;
         public double order_price;

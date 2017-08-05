@@ -4,15 +4,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ayzr.nepismis_v01.adapters.CookListAdapter;
 import com.example.ayzr.nepismis_v01.adapters.QuestionnarieAdapter;
 
 import org.json.JSONArray;
@@ -23,38 +23,56 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class QuestionnaireActivity extends AppCompatActivity {
+public class Survey_activity extends AppCompatActivity {
 
-    private Button button_morning;
-    private Button button_noon;
-    private Button button_evening;
-
-    boolean morning_visibility = true;
-    boolean noon_visibility = true;
-    boolean evening_visibility = true;
-
-    private ListView morning_list;
-    private ListView noon_list;
-    private ListView evening_list;
-
-    int ogun;
+    private ListView survey_list;
+    private int ogun;
 
     private ProgressDialog progress;
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
 
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    survey_list.setAdapter(null);
+                    parser(1);
+                    return true;
+                case R.id.navigation_dashboard:
+                    survey_list.setAdapter(null);
+                    parser(2);
+                    return true;
+                case R.id.navigation_notifications:
+                    survey_list.setAdapter(null);
+                    parser(3);
+                    return true;
+            }
+            return false;
+        }
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_questionnaire);
+        setContentView(R.layout.activity_survey_activity);
         setTitle(R.string.questionaire_activty_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        button_morning = (Button) findViewById(R.id.morning_questionaire_buttom_down);
-        button_noon = (Button) findViewById(R.id.noon_questionaire_buttom_down);
-        button_evening = (Button) findViewById(R.id.evening_questionaire_buttom_down);
+        survey_list = (ListView) findViewById(R.id.survey_list);
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
+        parser(1);
+    }
+
+    public void parser(final int it){
         if(isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking surveys...");
@@ -87,11 +105,12 @@ public class QuestionnaireActivity extends AppCompatActivity {
                         JSONArray array = new JSONArray(response);
                         for (int i = 0; i < array.length(); i++) {
                             JSONObject initial = array.getJSONObject(i);
-                             ogun = initial.getInt("ogun");
-                            if (ogun == 1) { // Sabah anketleri
+                            ogun = initial.getInt("ogun");
+                            if (ogun == 1 && it == 1) { // Sabah anketleri
                                 JSONArray anket_array = initial.getJSONArray("anketm");
 
                                 for (int j = 0; j < anket_array.length(); j++) {
+
                                     JSONObject json_anket = anket_array.getJSONObject(j);
                                     JSONArray menu_anket = json_anket.getJSONArray("menuanket");
 
@@ -105,7 +124,8 @@ public class QuestionnaireActivity extends AppCompatActivity {
                                     menus_morning.add(j, m);
                                 }
                                 update_morning_menus(menus_morning);
-                            } else if(ogun == 2){ // Öğle anketleri
+                            } else if(ogun == 2 && it == 2){ // Öğle anketleri
+
                                 JSONArray anket_array = initial.getJSONArray("anletm");
 
                                 for (int j = 0; j < anket_array.length(); j++) {
@@ -122,7 +142,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                                     menus_noon.add(j, m);
                                 }
                                 update_noon_menus(menus_noon);
-                            }else if(ogun == 3){ // Akşam anketleri
+                            }else if(ogun == 3 && it == 3){ // Akşam anketleri
                                 JSONArray anket_array = initial.getJSONArray("anletm");
 
                                 for (int j = 0; j < anket_array.length(); j++) {
@@ -151,25 +171,20 @@ public class QuestionnaireActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No internet access!", Toast.LENGTH_SHORT).show();
         }
     }
-    private void update_morning_menus(List<CookActivity.struct_menu> menus_m){
 
-        morning_list = (ListView) findViewById(R.id.questionnaire_morning_list);
+    private void update_morning_menus(List<CookActivity.struct_menu> menus_m){
         QuestionnarieAdapter morning_adapter = new QuestionnarieAdapter(this, menus_m);
-        morning_list.setAdapter(morning_adapter);
+        survey_list.setAdapter(morning_adapter);
     }
 
     private void update_noon_menus(List<CookActivity.struct_menu> menu_n){
-
-        noon_list = (ListView) findViewById(R.id.questionnaire_noon_list);
         QuestionnarieAdapter noon_adapter = new QuestionnarieAdapter(this, menu_n);
-        noon_list.setAdapter(noon_adapter);
+        survey_list.setAdapter(noon_adapter);
     }
 
     private void update_evening_menus(List<CookActivity.struct_menu> menu_e){
-
-        evening_list = (ListView) findViewById(R.id.questionnaire_evening_list);
         QuestionnarieAdapter evening_adapter = new QuestionnarieAdapter(this, menu_e);
-        evening_list.setAdapter(evening_adapter);
+        survey_list.setAdapter(evening_adapter);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -177,46 +192,10 @@ public class QuestionnaireActivity extends AppCompatActivity {
         return true;
     }
 
-
-    public void morning_questionaire_buttom_down_clicked(View view) {
-        if (morning_visibility){
-            morning_list.setVisibility(View.GONE);
-            button_morning.setBackgroundResource(R.mipmap.right);
-            morning_visibility = false;
-        } else {
-            morning_list.setVisibility(View.VISIBLE);
-            button_morning.setBackgroundResource(R.mipmap.down);
-            morning_visibility = true;
-        }
-    }
-
-    public void noon_questionaire_buttom_down_clicked(View view) {
-        if (noon_visibility){
-            noon_list.setVisibility(View.GONE);
-            button_noon.setBackgroundResource(R.mipmap.right);
-            noon_visibility = false;
-        } else {
-            noon_list.setVisibility(View.VISIBLE);
-            button_noon.setBackgroundResource(R.mipmap.down);
-            noon_visibility = true;
-        }
-    }
-
-    public void evening_questionaire_buttom_down_clicked(View view) {
-        if (evening_visibility){
-            evening_list.setVisibility(View.GONE);
-            button_evening.setBackgroundResource(R.mipmap.right);
-            evening_visibility = false;
-        } else {
-            evening_list.setVisibility(View.VISIBLE);
-            button_evening.setBackgroundResource(R.mipmap.down);
-            evening_visibility = true;
-        }
-    }
-
     private boolean isNetworkAvailable() {
         ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
+
 }
