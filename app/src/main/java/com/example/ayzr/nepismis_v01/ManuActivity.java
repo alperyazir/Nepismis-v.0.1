@@ -39,6 +39,8 @@ public class ManuActivity extends AppCompatActivity {
     MenusAdapter evening_adapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
+    private int current_tab_index;
+
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -47,14 +49,17 @@ public class ManuActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    current_tab_index =1;
                     menu_list.setAdapter(null);
                     parser(1);
                     return true;
                 case R.id.navigation_dashboard:
+                    current_tab_index =2;
                     menu_list.setAdapter(null);
                     parser(2);
                     return true;
                 case R.id.navigation_notifications:
+                    current_tab_index =3;
                     menu_list.setAdapter(null);
                     parser(3);
                     return true;
@@ -78,7 +83,7 @@ public class ManuActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        // burada ise Swipe Reflesh olduğunda ne yapacaksanız onu eklemeniz yeterlidir. Örneğin bir listeyi clear edebilir yada yeniden veri doldurabilirsiniz.
+                        parser(current_tab_index);
                     }
                 }, 2000);
             }
@@ -93,6 +98,7 @@ public class ManuActivity extends AppCompatActivity {
 
 
         parser(1);
+        current_tab_index =1;
     }
     public void parser(final int it){
         if(isNetworkAvailable()) {

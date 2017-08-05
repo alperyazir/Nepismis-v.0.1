@@ -67,7 +67,7 @@ public class CookActivity extends AppCompatActivity
                 new Handler().postDelayed(new Runnable() {
                     @Override public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
-                        // burada ise Swipe Reflesh olduğunda ne yapacaksanız onu eklemeniz yeterlidir. Örneğin bir listeyi clear edebilir yada yeniden veri doldurabilirsiniz.
+                        parser();
                     }
                 }, 2000);
             }
