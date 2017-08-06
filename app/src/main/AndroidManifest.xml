@@ -42,7 +42,7 @@
             android:label="@string/title_activity_survey_activity" />
         <activity
             android:name=".ManuActivity"
-            android:label="@string/title_activity_manu"></activity>
+            android:label="@string/title_activity_manu" />
     </application>
 
 </manifest>

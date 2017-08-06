@@ -8,9 +8,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -37,10 +40,8 @@ public class ManuActivity extends AppCompatActivity {
     MenusAdapter morning_adapter;
     MenusAdapter noon_adapter;
     MenusAdapter evening_adapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int current_tab_index;
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -76,21 +77,14 @@ public class ManuActivity extends AppCompatActivity {
         setTitle(R.string.menus_activity_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_menu);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        parser(current_tab_index);
-                    }
-                }, 2000);
+            public void onClick(View view) {
+                Snackbar.make(view, "Menu eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
-
         });
-        mSwipeRefreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light);
-
 
         menu_list = (ListView) findViewById(R.id.menu_list);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -135,51 +129,54 @@ public class ManuActivity extends AppCompatActivity {
                         JSONArray noon_array = initial.getJSONArray("ogle");
                         JSONArray evening_array = initial.getJSONArray("aksam");
 
-                        for(int i = 0; i < morning_array.length(); i++){
-                            JSONObject morning_menus = morning_array.getJSONObject(i);
-                            JSONArray menuy_array = morning_menus.getJSONArray("menuy");
+                        if(it == 1) {
+                            for (int i = 0; i < morning_array.length(); i++) {
+                                JSONObject morning_menus = morning_array.getJSONObject(i);
+                                JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                            CookActivity.struct_menu m = new CookActivity.struct_menu();
-                            for(int j = 0; j < menuy_array.length(); j++ ){
-                                JSONObject morning_menuy = menuy_array.getJSONObject(j);
-                                m.meal.add(j,morning_menuy.getString("yemek_adi"));
-                                if (j == 0)
-                                    m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                for (int j = 0; j < menuy_array.length(); j++) {
+                                    JSONObject morning_menuy = menuy_array.getJSONObject(j);
+                                    m.meal.add(j, morning_menuy.getString("yemek_adi"));
+                                    if (j == 0)
+                                        m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                }
+                                menus_morning.add(i, m);
                             }
-                            menus_morning.add(i,m);
+                            update_morning_orders(menus_morning);
                         }
+                        else if(it == 2) {
+                            for (int i = 0; i < noon_array.length(); i++) {
+                                JSONObject morning_menus = noon_array.getJSONObject(i);
+                                JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                        for(int i = 0; i < noon_array.length(); i++){
-                            JSONObject morning_menus = noon_array.getJSONObject(i);
-                            JSONArray menuy_array = morning_menus.getJSONArray("menuy");
-
-                            CookActivity.struct_menu m = new CookActivity.struct_menu();
-                            for(int j = 0; j < menuy_array.length(); j++ ){
-                                JSONObject morning_menuy = menuy_array.getJSONObject(j);
-                                m.meal.add(j,morning_menuy.getString("yemek_adi"));
-                                if (j == 0)
-                                    m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                for (int j = 0; j < menuy_array.length(); j++) {
+                                    JSONObject morning_menuy = menuy_array.getJSONObject(j);
+                                    m.meal.add(j, morning_menuy.getString("yemek_adi"));
+                                    if (j == 0)
+                                        m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                }
+                                menus_noon.add(i, m);
                             }
-                            menus_noon.add(i,m);
+                            update_noon_orders(menus_noon);
                         }
+                        else if(it == 3) {
+                            for (int i = 0; i < evening_array.length(); i++) {
+                                JSONObject morning_menus = evening_array.getJSONObject(i);
+                                JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                        for(int i = 0; i < evening_array.length(); i++){
-                            JSONObject morning_menus = evening_array.getJSONObject(i);
-                            JSONArray menuy_array = morning_menus.getJSONArray("menuy");
-
-                            CookActivity.struct_menu m = new CookActivity.struct_menu();
-                            for(int j = 0; j < menuy_array.length(); j++ ){
-                                JSONObject morning_menuy = menuy_array.getJSONObject(j);
-                                m.meal.add(j,morning_menuy.getString("yemek_adi"));
-                                if (j == 0)
-                                    m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                for (int j = 0; j < menuy_array.length(); j++) {
+                                    JSONObject morning_menuy = menuy_array.getJSONObject(j);
+                                    m.meal.add(j, morning_menuy.getString("yemek_adi"));
+                                    if (j == 0)
+                                        m.order_picture_id = morning_menuy.getInt("yemek_id");
+                                }
+                                menus_evening.add(i, m);
                             }
-                            menus_evening.add(i,m);
+                            update_evening_orders(menus_evening);
                         }
-                        update_morning_orders(menus_morning);
-                        update_noon_orders(menus_noon);
-                        update_evening_orders(menus_evening);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
