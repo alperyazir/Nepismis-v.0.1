@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcel;
@@ -43,6 +46,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 
+import static java.lang.StrictMath.toIntExact;
+
 public class MenusDialogFragment extends DialogFragment {
 
     private Button close_button;
@@ -52,6 +57,8 @@ public class MenusDialogFragment extends DialogFragment {
     private ListView list;
     private TextView text;
     private ProgressDialog progress;
+    private List<Long> selected_items;
+    private List<Integer> list_selected_menus;
 
 
     @Override
@@ -74,7 +81,30 @@ public class MenusDialogFragment extends DialogFragment {
         close_button = (Button) rootView.findViewById(R.id.button_okey);
         list = (ListView) rootView.findViewById(R.id.list_menu);
 
+        selected_items = new ArrayList<Long>();
+        list_selected_menus = new ArrayList<Integer>();
 
+        list.setOnItemClickListener(
+                new AdapterView.OnItemClickListener(){
+                    public void onItemClick(AdapterView<?> parent,View view, int position,long id) {
+                            if (!selected_items.contains(id)) {
+                                if(selected_items.size() < 3) {
+                                    selected_items.add(id);
+                                    view.setBackgroundResource(R.color.colorToggleOff);
+                                    CookActivity.struct_menu m = (CookActivity.struct_menu) parent.getItemAtPosition(position);
+                                    list_selected_menus.add(m.menu_id);
+                                }else{
+                                    Toast.makeText(getContext(),"3'den fazla seçilemez",Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                selected_items.remove(id);
+                                view.setBackgroundResource(R.color.colorBackground);
+                                CookActivity.struct_menu m = (CookActivity.struct_menu) parent.getItemAtPosition(position);
+                                list_selected_menus.remove(m.menu_id);
+                            }
+                    }
+                }
+        );
 
 
         getMenus(rootView,current_tab_index);
@@ -82,11 +112,52 @@ public class MenusDialogFragment extends DialogFragment {
         close_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                            }
+                createSurvey();
+            }
         });
 
         return rootView;
+    }
+
+    private void createSurvey(){
+        progress = new ProgressDialog(getActivity());
+        progress.setMessage("Adding menus...");
+        progress.setIndeterminate(true);
+        progress.show();
+
+        HashMap<String, String> params_db;
+
+        AccountDatabase accountDatabase = new AccountDatabase(getContext());
+        params_db = accountDatabase.kullaniciDetay();
+
+        HttpCall httpCall = new HttpCall();
+        httpCall.setMethodtype(HttpCall.GET);
+        httpCall.setUrl("http://nepismis.afakan.net/android/anketGuncel");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("user_id", params_db.get("tarih"));
+        params.put("menu_id",""+list_selected_menus.get(0));
+        params.put("menu_id",""+list_selected_menus.get(1));
+        params.put("menu_id",""+list_selected_menus.get(2));
+        params.put("ogun",""+1);
+        params.put("tarih","14/08/2017");
+        httpCall.setParams(params);
+
+        new HttpRequest(){
+            @Override
+            public List<CookActivity.struct_menu> onResponse(String response) {
+                super.onResponse(response);
+                try {
+                    progress.dismiss();
+                    JSONObject obje = new JSONObject(response);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+        }.execute(httpCall);
     }
 
     private void getMenus(View rootView, final int it){
@@ -124,10 +195,11 @@ public class MenusDialogFragment extends DialogFragment {
 
                         if(it == 1) {
                             for (int i = 0; i < morning_array.length(); i++) {
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 JSONObject morning_menus = morning_array.getJSONObject(i);
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
@@ -140,10 +212,11 @@ public class MenusDialogFragment extends DialogFragment {
                         }
                         else if(it == 2) {
                             for (int i = 0; i < noon_array.length(); i++) {
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 JSONObject morning_menus = noon_array.getJSONObject(i);
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
@@ -156,10 +229,11 @@ public class MenusDialogFragment extends DialogFragment {
                         }
                         else if(it == 3) {
                             for (int i = 0; i < evening_array.length(); i++) {
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 JSONObject morning_menus = evening_array.getJSONObject(i);
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
@@ -183,12 +257,6 @@ public class MenusDialogFragment extends DialogFragment {
     private void send_to_dialog(List<CookActivity.struct_menu> menu){
         final FragmentDialogAdapter fmAdapter = new FragmentDialogAdapter(getActivity(), menu);
         list.setAdapter(fmAdapter);
-
-        list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
-        list.setItemChecked(2, true);
-
-
-
     }
 
 

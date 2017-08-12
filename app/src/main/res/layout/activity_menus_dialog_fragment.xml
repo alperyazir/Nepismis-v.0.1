@@ -39,7 +39,8 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp" />
+            tools:layout_editor_absoluteY="8dp"
+/>
 
         <Button
             android:id="@+id/button_okey"

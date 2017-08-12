@@ -252,6 +252,7 @@ public class CookActivity extends AppCompatActivity
     }
 
     public static class struct_menu{
+        public int menu_id;
         public List<String> meal = new ArrayList<String>();
         public int order_picture_id;
 
