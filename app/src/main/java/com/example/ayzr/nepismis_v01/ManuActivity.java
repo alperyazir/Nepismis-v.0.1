@@ -5,18 +5,14 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ayzr.nepismis_v01.adapters.MenusAdapter;
@@ -119,7 +115,7 @@ public class ManuActivity extends AppCompatActivity {
 
             new HttpRequest() {
                 @Override
-                public void onResponse(String response) {
+                public List<CookActivity.struct_menu> onResponse(String response) {
                     super.onResponse(response);
                     try {
                         progress.dismiss();
@@ -180,6 +176,7 @@ public class ManuActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    return null;
                 }
             }.execute(httpCall);
 

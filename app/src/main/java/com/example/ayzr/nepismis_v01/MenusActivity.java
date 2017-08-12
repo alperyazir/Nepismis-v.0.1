@@ -1,28 +1,17 @@
 package com.example.ayzr.nepismis_v01;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ayzr.nepismis_v01.adapters.CommentsAdapter;
 import com.example.ayzr.nepismis_v01.adapters.MenusAdapter;
 
 import org.json.JSONArray;
@@ -88,7 +77,7 @@ public class MenusActivity extends AppCompatActivity {
 
            new HttpRequest() {
                @Override
-               public void onResponse(String response) {
+               public List<CookActivity.struct_menu> onResponse(String response) {
                    super.onResponse(response);
                     try {
                         progress.dismiss();
@@ -146,7 +135,8 @@ public class MenusActivity extends AppCompatActivity {
                    } catch (JSONException e) {
                        e.printStackTrace();
                    }
-                }
+                   return null;
+               }
             }.execute(httpCall);
 
         } else {

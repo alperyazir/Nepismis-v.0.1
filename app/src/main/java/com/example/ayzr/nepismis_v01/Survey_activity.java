@@ -2,18 +2,23 @@ package com.example.ayzr.nepismis_v01;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ayzr.nepismis_v01.adapters.QuestionnarieAdapter;
@@ -22,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,6 +41,8 @@ public class Survey_activity extends AppCompatActivity {
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
+    private int current_tab_index;
+    FragmentManager fm = getSupportFragmentManager();
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -45,14 +53,17 @@ public class Survey_activity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
                     survey_list.setAdapter(null);
+                    current_tab_index = 1;
                     parser(1);
                     return true;
                 case R.id.navigation_dashboard:
                     survey_list.setAdapter(null);
+                    current_tab_index =2;
                     parser(2);
                     return true;
                 case R.id.navigation_notifications:
                     survey_list.setAdapter(null);
+                    current_tab_index = 3;
                     parser(3);
                     return true;
             }
@@ -67,14 +78,16 @@ public class Survey_activity extends AppCompatActivity {
         setContentView(R.layout.activity_survey_activity);
         setTitle(R.string.questionaire_activty_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        current_tab_index = 1;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_survey);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Anket eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+              //  Snackbar.make(view, "Anket eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
+              //          .setAction("Action", null).show();
+                send_to_dialog();
+        }
         });
 
         survey_list = (ListView) findViewById(R.id.survey_list);
@@ -109,7 +122,7 @@ public class Survey_activity extends AppCompatActivity {
 
             new HttpRequest() {
                 @Override
-                public void onResponse(String response) {
+                public List<CookActivity.struct_menu> onResponse(String response) {
                     super.onResponse(response);
                     try {
                         progress.dismiss();
@@ -176,6 +189,7 @@ public class Survey_activity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    return null;
                 }
             }.execute(httpCall);
 
@@ -198,6 +212,7 @@ public class Survey_activity extends AppCompatActivity {
         QuestionnarieAdapter evening_adapter = new QuestionnarieAdapter(this, menu_e);
         survey_list.setAdapter(evening_adapter);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         onBackPressed();
@@ -210,4 +225,13 @@ public class Survey_activity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    private void send_to_dialog(){
+        MenusDialogFragment dFragment = new MenusDialogFragment();
+        // Show DialogFragment
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("current_tab_index",current_tab_index);
+        dFragment.setArguments(bundle);
+        dFragment.show(fm, "Dialog Fragment");
+    }
 }

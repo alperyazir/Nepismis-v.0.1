@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.example.ayzr.nepismis_v01.adapters.CookListAdapter;
 import com.example.ayzr.nepismis_v01.adapters.QuestionnarieAdapter;
 
 import org.json.JSONArray;
@@ -79,7 +78,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
 
             new HttpRequest() {
                 @Override
-                public void onResponse(String response) {
+                public List<CookActivity.struct_menu> onResponse(String response) {
                     super.onResponse(response);
                     try {
                         progress.dismiss();
@@ -144,6 +143,7 @@ public class QuestionnaireActivity extends AppCompatActivity {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    return null;
                 }
             }.execute(httpCall);
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
     tools:context="com.example.ayzr.nepismis_v01.MenusDialogFragment">
 
     <LinearLayout
@@ -34,6 +35,9 @@
             android:id="@+id/list_menu"
             android:layout_width="match_parent"
             android:layout_height="400dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp" />
 
@@ -42,7 +46,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/main_round_button_cook_design"
-            android:onClick="button_save_clicked"
             android:text="Kaydet"
             android:textColor="@android:color/white"
             android:textSize="20sp" />

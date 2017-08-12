@@ -8,15 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -97,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
         httpCall.setParams(params);
         new HttpRequest(){
             @Override
-            public void onResponse(String response) {
+            public List<CookActivity.struct_menu> onResponse(String response) {
                 super.onResponse(response);
                 try {
                     progress.dismiss();
@@ -125,6 +123,7 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(),"Başarısız!",Toast.LENGTH_SHORT).show();
                     }
                 }
+                return null;
             }
 
         }.execute(httpCall);

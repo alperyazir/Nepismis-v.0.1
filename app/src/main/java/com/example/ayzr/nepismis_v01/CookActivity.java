@@ -1,6 +1,5 @@
 package com.example.ayzr.nepismis_v01;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -9,8 +8,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.NotificationCompat;
@@ -21,22 +18,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.os.Handler;
 
 import com.example.ayzr.nepismis_v01.adapters.CookListAdapter;
-import com.example.ayzr.nepismis_v01.adapters.MenusAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -110,7 +103,7 @@ public class CookActivity extends AppCompatActivity
 
             new HttpRequest() {
                 @Override
-                public void onResponse(String response) {
+                public List<struct_menu> onResponse(String response) {
                     super.onResponse(response);
                     try {
                         progress.dismiss();
@@ -142,6 +135,7 @@ public class CookActivity extends AppCompatActivity
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    return null;
                 }
             }.execute(httpCall);
 

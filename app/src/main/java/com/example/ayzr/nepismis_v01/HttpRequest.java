@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -74,8 +75,9 @@ public class HttpRequest extends AsyncTask<HttpCall, String, String>{
         onResponse(s);
     }
 
-    public void onResponse(String response){
+    public List<CookActivity.struct_menu> onResponse(String response){
 
+        return null;
     }
 
     @Override
