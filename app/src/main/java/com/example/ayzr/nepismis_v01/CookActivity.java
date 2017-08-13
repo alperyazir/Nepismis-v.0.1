@@ -187,8 +187,6 @@ public class CookActivity extends AppCompatActivity
             startActivity(new Intent(this,PutOnSaleActivity.class));
         } else if (id == R.id.nav_questionnaire) {
             startActivity(new Intent(this,Survey_activity.class));
-        } else if (id == R.id.nav_make_questionnaire) {
-            startActivity(new Intent(this,CreateQuestionarieActivty.class));
         } else if (id == R.id.nav_my_account) {
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_help) {

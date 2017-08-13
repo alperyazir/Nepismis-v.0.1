@@ -19,10 +19,6 @@
             android:icon="@drawable/ic_menu_manage"
             android:title="Anketlerim" />
         <item
-            android:id="@+id/nav_make_questionnaire"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Anket Oluştur" />
-        <item
             android:id="@+id/nav_menus"
             android:icon="@drawable/ic_menu_manage"
             android:title="Menulerim" />
