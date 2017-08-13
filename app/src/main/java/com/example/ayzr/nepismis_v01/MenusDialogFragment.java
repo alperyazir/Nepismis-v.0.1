@@ -12,6 +12,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -51,6 +52,7 @@ import static java.lang.StrictMath.toIntExact;
 public class MenusDialogFragment extends DialogFragment {
 
     private Button close_button;
+    private Button save_button;
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
@@ -59,15 +61,15 @@ public class MenusDialogFragment extends DialogFragment {
     private ProgressDialog progress;
     private List<Long> selected_items;
     private List<Integer> list_selected_menus;
-
+    private int current_tab_index;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_menus_dialog_fragment, container,false);
+        final View rootView = inflater.inflate(R.layout.activity_menus_dialog_fragment, container,false);
         getDialog().setTitle("Menu Seç");
 
         Bundle bundle = getArguments();
-        int current_tab_index = bundle.getInt("current_tab_index", -1);
+        current_tab_index = bundle.getInt("current_tab_index", -1);
 
         text = (TextView) rootView.findViewById(R.id.text_dialog);
         if(current_tab_index == 1) {
@@ -78,7 +80,8 @@ public class MenusDialogFragment extends DialogFragment {
             text.setText("Akşam");
         }
 
-        close_button = (Button) rootView.findViewById(R.id.button_okey);
+        close_button = (Button) rootView.findViewById(R.id.button_close);
+        save_button = (Button) rootView.findViewById(R.id.button_save);
         list = (ListView) rootView.findViewById(R.id.list_menu);
 
         selected_items = new ArrayList<Long>();
@@ -109,10 +112,22 @@ public class MenusDialogFragment extends DialogFragment {
 
         getMenus(rootView,current_tab_index);
 
+        save_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (list_selected_menus.size() == 3){
+                    createSurvey();
+            }else {
+                      Snackbar.make(rootView, "Select 3 menus please", Snackbar.LENGTH_SHORT)
+                              .setAction("Action", null).show();
+                }
+            }
+        });
+
         close_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createSurvey();
+                dismiss();
             }
         });
 
@@ -132,14 +147,14 @@ public class MenusDialogFragment extends DialogFragment {
 
         HttpCall httpCall = new HttpCall();
         httpCall.setMethodtype(HttpCall.GET);
-        httpCall.setUrl("http://nepismis.afakan.net/android/anketGuncel");
+        httpCall.setUrl("http://nepismis.afakan.net/android/anketOlustur");
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", params_db.get("tarih"));
-        params.put("menu_id",""+list_selected_menus.get(0));
-        params.put("menu_id",""+list_selected_menus.get(1));
-        params.put("menu_id",""+list_selected_menus.get(2));
-        params.put("ogun",""+1);
-        params.put("tarih","14/08/2017");
+        params.put("ogun",""+current_tab_index);
+        params.put("menu_1",""+list_selected_menus.get(0));
+        params.put("menu_2",""+list_selected_menus.get(1));
+        params.put("menu_3",""+list_selected_menus.get(2));
+        params.put("tarih","2017/08/14");
         httpCall.setParams(params);
 
         new HttpRequest(){
@@ -148,12 +163,20 @@ public class MenusDialogFragment extends DialogFragment {
                 super.onResponse(response);
                 try {
                     progress.dismiss();
-                    JSONObject obje = new JSONObject(response);
 
-
+                    JSONObject initial = new JSONObject(response);
+                    boolean saved = initial.getBoolean("save");
+                    if(saved){
+                        dismiss();
+                        Toast.makeText(getContext(),"Saved Survey :)",Toast.LENGTH_LONG).show();
+                    }else{
+                        dismiss();
+                        Toast.makeText(getContext(),"There are already saved Surveys. Sorry :(",Toast.LENGTH_LONG).show();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
                 return null;
             }
 
@@ -259,6 +282,13 @@ public class MenusDialogFragment extends DialogFragment {
         list.setAdapter(fmAdapter);
     }
 
-
+    @Override
+    public void onDismiss(final DialogInterface dialog) {
+        super.onDismiss(dialog);
+        final Activity activity = getActivity();
+        if (activity instanceof DialogInterface.OnDismissListener) {
+            ((DialogInterface.OnDismissListener) activity).onDismiss(dialog);
+        }
+    }
 
 }

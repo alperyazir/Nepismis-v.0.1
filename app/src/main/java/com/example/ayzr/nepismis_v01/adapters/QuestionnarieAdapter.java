@@ -66,17 +66,11 @@ public class QuestionnarieAdapter extends BaseAdapter {
         order_menu_2.setText(menu.meal.get(1));
         order_menu_3.setText(menu.meal.get(2));
 
-        Transformation transformation = new RoundedTransformationBuilder()
-                .borderColor(Color.WHITE)
-                .borderWidthDp(0)
-                .cornerRadiusDp(10)
-                .oval(false)
-                .build();
-
         String url = "http://nepismis.afakan.net/images/yemek/" + menu.order_picture_id + ".jpg";
-        if(URLUtil.isValidUrl(url)) {
-            Picasso.with(mInflater.getContext()).load(url).into(order_image);
-        }
+        Picasso.with(mInflater.getContext()).load(url).fit().centerCrop()
+                .placeholder(R.mipmap.ic_launcher_ne_pismis)
+                .error(R.mipmap.ic_launcher_ne_pismis)
+                .into(order_image);
         return satirView;
     }
 
