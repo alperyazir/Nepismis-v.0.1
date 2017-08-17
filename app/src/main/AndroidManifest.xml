@@ -27,7 +27,6 @@
         <activity android:name=".RequestService" />
         <activity android:name=".OrdersOnSale" />
         <activity android:name=".CreateQuestionarieActivty" />
-        <activity android:name=".MenusDialogFragment" />
         <activity
             android:name=".SplashActivity"
             android:theme="@style/AppTheme.NoActionBar">

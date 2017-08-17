@@ -41,8 +41,12 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.security.PrivateKey;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -140,6 +144,14 @@ public class MenusDialogFragment extends DialogFragment {
         progress.setIndeterminate(true);
         progress.show();
 
+        DateFormat df = new SimpleDateFormat("\"yyyy/mm/dd\"");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        Date tomorrow = calendar.getTime();
+
+        String reportDate = df.format(tomorrow);
+
         HashMap<String, String> params_db;
 
         AccountDatabase accountDatabase = new AccountDatabase(getContext());
@@ -154,7 +166,7 @@ public class MenusDialogFragment extends DialogFragment {
         params.put("menu_1",""+list_selected_menus.get(0));
         params.put("menu_2",""+list_selected_menus.get(1));
         params.put("menu_3",""+list_selected_menus.get(2));
-        params.put("tarih","2017/08/14");
+        params.put("tarih",reportDate);
         httpCall.setParams(params);
 
         new HttpRequest(){

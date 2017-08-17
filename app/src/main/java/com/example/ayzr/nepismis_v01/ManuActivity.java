@@ -2,6 +2,8 @@ package com.example.ayzr.nepismis_v01;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -9,8 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.GestureDetector;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -32,10 +37,12 @@ public class ManuActivity extends AppCompatActivity {
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
+    FragmentManager fm = getSupportFragmentManager();
 
     MenusAdapter morning_adapter;
     MenusAdapter noon_adapter;
     MenusAdapter evening_adapter;
+
 
     private int current_tab_index;
 
@@ -73,19 +80,27 @@ public class ManuActivity extends AppCompatActivity {
         setTitle(R.string.menus_activity_name);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_menu);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Menu eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+               // Snackbar.make(view, "Menu eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
+               //         .setAction("Action", null).show();
+                MenuDialogFragment dFragment = new MenuDialogFragment();
+                // Show DialogFragment
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("current_tab_index",current_tab_index);
+                dFragment.setArguments(bundle);
+                dFragment.show(fm, "Dialog Fragment1");
             }
         });
 
         menu_list = (ListView) findViewById(R.id.menu_list);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
 
         parser(1);
         current_tab_index =1;
@@ -184,6 +199,7 @@ public class ManuActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "No internet access!", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     public void update_morning_orders(List<CookActivity.struct_menu> menu){
         morning_adapter = new MenusAdapter(this, menu);
