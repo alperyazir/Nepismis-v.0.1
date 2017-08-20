@@ -86,10 +86,7 @@ public class ManuActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               // Snackbar.make(view, "Menu eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
-               //         .setAction("Action", null).show();
                 MenuDialogFragment dFragment = new MenuDialogFragment();
-                // Show DialogFragment
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("current_tab_index",current_tab_index);
@@ -115,6 +112,8 @@ public class ManuActivity extends AppCompatActivity {
             menus_morning.clear();
             menus_noon.clear();
             menus_evening.clear();
+            menu_list.setAdapter(null);
+
             HashMap<String, String> params_db;
 
             AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
@@ -143,9 +142,10 @@ public class ManuActivity extends AppCompatActivity {
                         if(it == 1) {
                             for (int i = 0; i < morning_array.length(); i++) {
                                 JSONObject morning_menus = morning_array.getJSONObject(i);
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
@@ -159,9 +159,10 @@ public class ManuActivity extends AppCompatActivity {
                         else if(it == 2) {
                             for (int i = 0; i < noon_array.length(); i++) {
                                 JSONObject morning_menus = noon_array.getJSONObject(i);
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
@@ -175,9 +176,10 @@ public class ManuActivity extends AppCompatActivity {
                         else if(it == 3) {
                             for (int i = 0; i < evening_array.length(); i++) {
                                 JSONObject morning_menus = evening_array.getJSONObject(i);
+                                CookActivity.struct_menu m = new CookActivity.struct_menu();
+                                m.menu_id = morning_menus.getInt("menu_id");
                                 JSONArray menuy_array = morning_menus.getJSONArray("menuy");
 
-                                CookActivity.struct_menu m = new CookActivity.struct_menu();
                                 for (int j = 0; j < menuy_array.length(); j++) {
                                     JSONObject morning_menuy = menuy_array.getJSONObject(j);
                                     m.meal.add(j, morning_menuy.getString("yemek_adi"));
