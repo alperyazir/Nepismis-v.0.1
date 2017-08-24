@@ -48,6 +48,8 @@ public class CookActivity extends AppCompatActivity
 
     private ProgressDialog progress;
 
+    private ListView listView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +58,7 @@ public class CookActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         setTitle(R.string.cook_activity_name);
+         listView = (ListView) findViewById(R.id.list_order);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -150,7 +153,7 @@ public class CookActivity extends AppCompatActivity
 
     private void update_orders(List<struct_order> orders){
 
-        ListView listView = (ListView) findViewById(R.id.list_order);
+        listView.setAdapter(null);
         CookListAdapter adapter = new CookListAdapter(this,orders);
         listView.setAdapter(adapter);
     }
