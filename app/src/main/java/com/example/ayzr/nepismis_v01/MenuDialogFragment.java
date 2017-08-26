@@ -202,13 +202,13 @@ public class MenuDialogFragment extends DialogFragment {
                     progress.dismiss();
 
                     JSONObject initial = new JSONObject(response);
-                    boolean saved = initial.getBoolean("save");
-                    if(saved){
+                    int saved = initial.getInt("save");
+                    if(saved==1){
                         dismiss();
-                        Toast.makeText(getContext(),"Menu başarıyla eklendi :)",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(button_add_menu.getContext(),"Menu başarıyla eklendi :)",Toast.LENGTH_SHORT).show();
                     }else{
                         dismiss();
-                        Toast.makeText(getContext(),"Menü eklenemedi :(",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(button_add_menu.getContext(),"Menü eklenemedi :(",Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

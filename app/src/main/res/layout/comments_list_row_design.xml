@@ -2,14 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:layout_margin="10dp"
-    android:background="@drawable/comments_row_design">
+    android:background="@drawable/comments_row_design"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="right"
         android:orientation="vertical">
 
         <LinearLayout
@@ -53,15 +54,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:text="Yermek mohkem mohkem muazzam muazzam ateş ateş"
-                android:textColor="@android:color/black" />
+                android:text="Yermek mohkem mohkem muazzam muazzam ateş ateş" />
 
             <TextView
                 android:id="@+id/text_answer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:gravity="right"
-                android:textColor="@android:color/black" />
+                android:textColor="@android:color/holo_purple"
+                android:textStyle="italic"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,27 +77,30 @@
                 android:id="@+id/editText_add_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/comments_row_design"
                 android:ems="10"
-                android:hint="Add Comments"
-                android:inputType="textPersonName" />
+                android:gravity="right"
+                android:hint="Add Comments..."
+                android:inputType="text|textMultiLine|textCapSentences"
+                android:visibility="gone" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="27dp"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/button_comments_answer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/main_round_button_cook_design"
                 android:text="Cevap Ver"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
         </LinearLayout>
     </LinearLayout>
 

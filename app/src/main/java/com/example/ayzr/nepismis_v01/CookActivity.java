@@ -97,6 +97,8 @@ public class CookActivity extends AppCompatActivity
 
             HashMap<String, String> params_db;
 
+            orders.clear();
+
             AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
             params_db = accountDatabase.kullaniciDetay();
 

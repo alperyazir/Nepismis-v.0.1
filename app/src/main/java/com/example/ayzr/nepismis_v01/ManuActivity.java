@@ -35,7 +35,7 @@ public class ManuActivity extends AppCompatActivity {
     private ListView menu_list;
     private ProgressDialog progress;
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
-    final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
+    final List<CookActivity.struct_menu> menus_noon = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
     FragmentManager fm = getSupportFragmentManager();
 
@@ -53,17 +53,17 @@ public class ManuActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    current_tab_index =1;
+                    current_tab_index = 1;
                     menu_list.setAdapter(null);
                     parser(1);
                     return true;
                 case R.id.navigation_dashboard:
-                    current_tab_index =2;
+                    current_tab_index = 2;
                     menu_list.setAdapter(null);
                     parser(2);
                     return true;
                 case R.id.navigation_notifications:
-                    current_tab_index =3;
+                    current_tab_index = 3;
                     menu_list.setAdapter(null);
                     parser(3);
                     return true;
@@ -81,7 +81,6 @@ public class ManuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_menu);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +88,7 @@ public class ManuActivity extends AppCompatActivity {
                 MenuDialogFragment dFragment = new MenuDialogFragment();
 
                 Bundle bundle = new Bundle();
-                bundle.putInt("current_tab_index",current_tab_index);
+                bundle.putInt("current_tab_index", current_tab_index);
                 dFragment.setArguments(bundle);
                 dFragment.show(fm, "Dialog Fragment1");
             }
@@ -100,10 +99,11 @@ public class ManuActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         parser(1);
-        current_tab_index =1;
+        current_tab_index = 1;
     }
-    public void parser(final int it){
-        if(isNetworkAvailable()) {
+
+    public void parser(final int it) {
+        if (isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking menus...");
             progress.setIndeterminate(true);
@@ -139,7 +139,7 @@ public class ManuActivity extends AppCompatActivity {
                         JSONArray noon_array = initial.getJSONArray("ogle");
                         JSONArray evening_array = initial.getJSONArray("aksam");
 
-                        if(it == 1) {
+                        if (it == 1) {
                             for (int i = 0; i < morning_array.length(); i++) {
                                 JSONObject morning_menus = morning_array.getJSONObject(i);
                                 CookActivity.struct_menu m = new CookActivity.struct_menu();
@@ -155,8 +155,7 @@ public class ManuActivity extends AppCompatActivity {
                                 menus_morning.add(i, m);
                             }
                             update_morning_orders(menus_morning);
-                        }
-                        else if(it == 2) {
+                        } else if (it == 2) {
                             for (int i = 0; i < noon_array.length(); i++) {
                                 JSONObject morning_menus = noon_array.getJSONObject(i);
                                 CookActivity.struct_menu m = new CookActivity.struct_menu();
@@ -172,8 +171,7 @@ public class ManuActivity extends AppCompatActivity {
                                 menus_noon.add(i, m);
                             }
                             update_noon_orders(menus_noon);
-                        }
-                        else if(it == 3) {
+                        } else if (it == 3) {
                             for (int i = 0; i < evening_array.length(); i++) {
                                 JSONObject morning_menus = evening_array.getJSONObject(i);
                                 CookActivity.struct_menu m = new CookActivity.struct_menu();
@@ -203,18 +201,36 @@ public class ManuActivity extends AppCompatActivity {
     }
 
 
-    public void update_morning_orders(List<CookActivity.struct_menu> menu){
-        morning_adapter = new MenusAdapter(this, menu);
+    public void update_morning_orders(List<CookActivity.struct_menu> menu) {
+        morning_adapter = new MenusAdapter(this, menu) {
+            @Override
+            public void callBack() {
+                menu_list.setAdapter(null);
+                parser(1);
+            }
+        };
         menu_list.setAdapter(morning_adapter);
     }
 
-    public void update_noon_orders(List<CookActivity.struct_menu> menu){
-        noon_adapter = new MenusAdapter(this, menu);
+    public void update_noon_orders(List<CookActivity.struct_menu> menu) {
+        noon_adapter = new MenusAdapter(this, menu){
+            @Override
+            public void callBack() {
+                menu_list.setAdapter(null);
+                parser(2);
+            }
+        };
         menu_list.setAdapter(noon_adapter);
     }
 
-    public void update_evening_orders(List<CookActivity.struct_menu> menu){
-        evening_adapter = new MenusAdapter(this, menu);
+    public void update_evening_orders(List<CookActivity.struct_menu> menu) {
+        evening_adapter = new MenusAdapter(this, menu){
+            @Override
+            public void callBack() {
+                menu_list.setAdapter(null);
+                parser(3);
+            }
+        };
         menu_list.setAdapter(evening_adapter);
     }
 
@@ -225,7 +241,7 @@ public class ManuActivity extends AppCompatActivity {
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }

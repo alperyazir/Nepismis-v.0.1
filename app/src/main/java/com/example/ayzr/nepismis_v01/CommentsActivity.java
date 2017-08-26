@@ -1,7 +1,9 @@
 package com.example.ayzr.nepismis_v01;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +30,8 @@ public class CommentsActivity extends AppCompatActivity {
     final List<struct_comments> comm = new ArrayList<struct_comments>();
     private ProgressDialog progress;
     private ListView listView;
+    private CommentsAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,9 +42,8 @@ public class CommentsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-         listView = (ListView) findViewById(R.id.list_comments);
+        listView = (ListView) findViewById(R.id.list_comments);
         listView.setAdapter(null);
-
 
         parser();
     }
@@ -51,12 +54,14 @@ public class CommentsActivity extends AppCompatActivity {
         return true;
     }
 
-    private void parser(){
-        if(isNetworkAvailable()) {
+    public void parser() {
+
+        if (isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking comments...");
             progress.setIndeterminate(true);
             progress.show();
+
 
             HashMap<String, String> params_db;
 
@@ -71,13 +76,14 @@ public class CommentsActivity extends AppCompatActivity {
             params.put("user_id", params_db.get("tarih"));
             httpCall.setParams(params);
 
+
             new HttpRequest() {
                 @Override
                 public List<CookActivity.struct_menu> onResponse(String response) {
                     super.onResponse(response);
                     try {
                         progress.dismiss();
-
+                        comm.clear();
                         JSONArray array = new JSONArray(response);
                         for (int i = 0; i < array.length(); i++) {
                             struct_comments c = new struct_comments();
@@ -90,9 +96,20 @@ public class CommentsActivity extends AppCompatActivity {
 
                             JSONObject ownerJson = initial.getJSONObject("yorumlayan");
 
+
+                            if(!initial.isNull("cevap")) {
+                                JSONObject cook_answer = initial.getJSONObject("cevap");
+                                c.confirm = cook_answer.getInt("onay");
+                                c.cook_ans = cook_answer.getString("yorum");
+                            }else{
+                                c.confirm = -1;
+                                c.cook_ans = "";
+                            }
+
+
                             c.comment_owner_name = ownerJson.getString("name");
                             c.comment_owner_id = ownerJson.getInt("id");
-                            comm.add(i,c);
+                            comm.add(i, c);
                         }
                         update_comments(comm);
 
@@ -108,23 +125,33 @@ public class CommentsActivity extends AppCompatActivity {
         }
     }
 
-    private void update_comments( List<struct_comments> c){
-       CommentsAdapter adapter = new CommentsAdapter(this, c);
+    private void update_comments(List<struct_comments> c) {
+
+        adapter = new CommentsAdapter(this, c){
+            @Override
+            public void callBack(){
+                listView.setAdapter(null);
+                parser();
+            }
+        };
         listView.setAdapter(adapter);
+
     }
 
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static class struct_comments{
+    public static class struct_comments {
         public String comment_owner_name;
         public int comment_owner_id;
         public double commenr_rating;
         public String comment;
-        public  int comment_id;
+        public int comment_id;
+        public String cook_ans;
+        public int confirm;
     }
 }

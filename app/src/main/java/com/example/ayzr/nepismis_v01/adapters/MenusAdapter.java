@@ -76,8 +76,8 @@ public class MenusAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, final View convertView, final ViewGroup parent) {
 
-            View satirView;
-            final CookActivity.struct_menu menu = mMenus.get(position);
+        View satirView;
+        final CookActivity.struct_menu menu = mMenus.get(position);
 
 
         satirView = mInflater.inflate(R.layout.menus_design, null);
@@ -86,12 +86,9 @@ public class MenusAdapter extends BaseAdapter {
         TextView order_menu_2 = (TextView) satirView.findViewById(R.id.text_put_on_sale_menu_2);
         TextView order_menu_3 = (TextView) satirView.findViewById(R.id.text_put_on_sale_menu_3);
         ImageView order_image = (ImageView) satirView.findViewById(R.id.image_put_on_sale_cook);
-         imageClick = (ImageView) satirView.findViewById(R.id.row_click_imageView1);
-
-
+        imageClick = (ImageView) satirView.findViewById(R.id.row_click_imageView1);
 
         try {
-
             imageClick.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -99,7 +96,7 @@ public class MenusAdapter extends BaseAdapter {
                     switch (v.getId()) {
                         case R.id.row_click_imageView1:
 
-                            PopupMenu popup = new PopupMenu(imageClick.getContext(),v);
+                            PopupMenu popup = new PopupMenu(imageClick.getContext(), v);
                             popup.getMenuInflater().inflate(R.menu.popup_menu,
                                     popup.getMenu());
                             popup.show();
@@ -122,9 +119,6 @@ public class MenusAdapter extends BaseAdapter {
                         default:
                             break;
                     }
-
-
-
                 }
             });
 
@@ -137,7 +131,7 @@ public class MenusAdapter extends BaseAdapter {
         order_menu_2.setText(menu.meal.get(1));
         order_menu_3.setText(menu.meal.get(2));
 
-        String url = "http://nepismis.afakan.net/images/yemek/" + menu.order_picture_id +  ".jpg";
+        String url = "http://nepismis.afakan.net/images/yemek/" + menu.order_picture_id + ".jpg";
 
         Picasso.with(mInflater.getContext()).load(url).fit().centerCrop()
                 .placeholder(R.mipmap.ic_launcher_ne_pismis)
@@ -148,7 +142,10 @@ public class MenusAdapter extends BaseAdapter {
 
     }
 
-    private void delete_menu(int i){
+    public void callBack() {
+    }
+
+    private void delete_menu(int i) {
         HttpCall httpCall = new HttpCall();
         httpCall.setMethodtype(HttpCall.GET);
         httpCall.setUrl("http://nepismis.afakan.net/android/menuSil");
@@ -162,11 +159,12 @@ public class MenusAdapter extends BaseAdapter {
                 super.onResponse(response);
                 try {
                     JSONObject initial = new JSONObject(response);
-                    boolean saved = initial.getBoolean("save");
-                    if(saved){
-                        Toast.makeText(imageClick.getContext(),"Menu başarıyla silindi :)",Toast.LENGTH_SHORT).show();
-                    }else{
-                        Toast.makeText(imageClick.getContext(),"Menü silinemedi :(",Toast.LENGTH_SHORT).show();
+                    int saved = initial.getInt("save");
+                    if (saved == 1) {
+                        Toast.makeText(imageClick.getContext(), "Menu başarıyla silindi :)", Toast.LENGTH_SHORT).show();
+                        callBack();
+                    } else {
+                        Toast.makeText(imageClick.getContext(), "Menü silinemedi :(", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
