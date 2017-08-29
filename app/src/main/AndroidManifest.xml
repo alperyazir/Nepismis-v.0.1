@@ -42,6 +42,19 @@
         <activity
             android:name=".ManuActivity"
             android:label="@string/title_activity_manu" />
+
+        <service
+            android:name=".FirebaseMesaj">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service
+            android:name=".FirebaseTokenAl">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

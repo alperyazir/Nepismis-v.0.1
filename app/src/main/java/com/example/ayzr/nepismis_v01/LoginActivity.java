@@ -114,6 +114,7 @@ public class LoginActivity extends AppCompatActivity {
                         db.resetTables();
                         db.kullaniciEkle(username, password, ""+user_id);
 
+                        tokenGonder(user_id,FirebaseTokenAl.refreshedToken);
                         startActivity(new Intent(getApplicationContext(),CookActivity.class));
                         finish();
                     }
@@ -136,6 +137,40 @@ public class LoginActivity extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    public  void tokenGonder(int user,String token)
+    {
+        HashMap<String, String> params_db;
+        AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
+        params_db = accountDatabase.kullaniciDetay();
+
+        HttpCall httpCall2 = new HttpCall();
+        httpCall2.setMethodtype(HttpCall.GET);
+        httpCall2.setUrl("http://nepismis.afakan.net/android/tokenYaz");
+        HashMap<String,String> params = new HashMap<>();
+        params.put("token",token);
+        params.put("user_id",params_db.get("tarih"));
+        httpCall2.setParams(params);
+        new HttpRequest(){
+            @Override
+            public List<CookActivity.struct_menu> onResponse(String response) {
+                super.onResponse(response);
+                try {
+
+                    JSONObject obje55 = new JSONObject(response);
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+
+                    Toast.makeText(getApplicationContext(),"Başarısız!",Toast.LENGTH_SHORT).show();
+
+                }
+                return null;
+            }
+
+        }.execute(httpCall2);
+
+    }
 
 
 }

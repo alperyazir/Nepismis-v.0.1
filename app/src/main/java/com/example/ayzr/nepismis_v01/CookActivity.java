@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -58,14 +59,15 @@ public class CookActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         setTitle(R.string.cook_activity_name);
-         listView = (ListView) findViewById(R.id.list_order);
+        listView = (ListView) findViewById(R.id.list_order);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
-                    @Override public void run() {
+                    @Override
+                    public void run() {
                         mSwipeRefreshLayout.setRefreshing(false);
                         parser();
                     }
@@ -88,17 +90,15 @@ public class CookActivity extends AppCompatActivity
 
     }
 
-    private void parser(){
-        if(isNetworkAvailable()) {
+    private void parser() {
+        if (isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking orders...");
             progress.setIndeterminate(true);
             progress.show();
 
-            HashMap<String, String> params_db;
-
             orders.clear();
-
+            HashMap<String, String> params_db;
             AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
             params_db = accountDatabase.kullaniciDetay();
 
@@ -124,6 +124,8 @@ public class CookActivity extends AppCompatActivity
 
                             struct_order o = new struct_order();
                             struct_menu m = new struct_menu();
+                            o.order_id = initial.getInt("id");
+
                             for (int j = 0; j < menuArray.length(); j++) {
                                 JSONObject json_menu = menuArray.getJSONObject(j);
                                 String str = json_menu.getString("yemek_adi");
@@ -153,10 +155,15 @@ public class CookActivity extends AppCompatActivity
         }
     }
 
-    private void update_orders(List<struct_order> orders){
+    private void update_orders(List<struct_order> orders) {
 
         listView.setAdapter(null);
-        CookListAdapter adapter = new CookListAdapter(this,orders);
+        CookListAdapter adapter = new CookListAdapter(this, orders){
+            @Override
+            public void callBack() {
+                parser();
+            }
+        };
         listView.setAdapter(adapter);
     }
 
@@ -166,18 +173,18 @@ public class CookActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
-            {
+            if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis()) {
                 super.onBackPressed();
                 return;
+            } else {
+                Toast.makeText(getApplicationContext(), "Tap back button in order to exit", Toast.LENGTH_SHORT).show();
             }
-            else { Toast.makeText(getApplicationContext(), "Tap back button in order to exit", Toast.LENGTH_SHORT).show(); }
 
             mBackPressed = System.currentTimeMillis();
         }
-   }
+    }
 
-    public void button_cook_order_ready_clicked(View view){
+    public void button_cook_order_ready_clicked(View view) {
         /// TODO
         /// Add codes what happened when order ready
     }
@@ -193,9 +200,9 @@ public class CookActivity extends AppCompatActivity
         } else if (id == R.id.nav_menu_on_order) {
             startActivity(new Intent(this, OrdersOnSale.class));
         } else if (id == R.id.nav_put_on_sale) {
-            startActivity(new Intent(this,PutOnSaleActivity.class));
+            startActivity(new Intent(this, PutOnSaleActivity.class));
         } else if (id == R.id.nav_questionnaire) {
-            startActivity(new Intent(this,Survey_activity.class));
+            startActivity(new Intent(this, Survey_activity.class));
         } else if (id == R.id.nav_my_account) {
             startActivity(new Intent(this, ProfileActivity.class));
         } else if (id == R.id.nav_help) {
@@ -204,15 +211,15 @@ public class CookActivity extends AppCompatActivity
 
             AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
             accountDatabase.resetTables();
-            startActivity(new Intent(this,LoginActivity.class));
+            startActivity(new Intent(this, LoginActivity.class));
             finish();
 
         } else if (id == R.id.nav_about) {
 
-        } else if (id == R.id.nav_menus){
-            startActivity(new Intent(this,ManuActivity.class));
-        } else if (id == R.id.nav_request_service){
-            startActivity(new Intent(this,RequestService.class));
+        } else if (id == R.id.nav_menus) {
+            startActivity(new Intent(this, ManuActivity.class));
+        } else if (id == R.id.nav_request_service) {
+            startActivity(new Intent(this, RequestService.class));
         }
 
 
@@ -229,7 +236,7 @@ public class CookActivity extends AppCompatActivity
         mBuilder.setAutoCancel(true);
 
         //Uygulama da açılacak Activity, intent olarak tanımlanıyor.
-        Intent resultIntent = new Intent(this, MenusActivity.class);
+        Intent resultIntent = new Intent(this, ManuActivity.class);
 
         //stackBuilder nesnesi activityler arasında geri geçişi oluşturuyor.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
@@ -252,19 +259,21 @@ public class CookActivity extends AppCompatActivity
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static class struct_menu{
+    public static class struct_menu {
         public int menu_id;
         public List<String> meal = new ArrayList<String>();
         public int order_picture_id;
 
     }
-    public static class struct_order{
+
+    public static class struct_order {
         public String order_name;
+        public int order_id;
         public struct_menu order_menu;
         public int order_count;
         public double order_price;

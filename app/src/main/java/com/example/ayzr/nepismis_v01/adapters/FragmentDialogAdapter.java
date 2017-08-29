@@ -9,8 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ayzr.nepismis_v01.CookActivity;
 import com.example.ayzr.nepismis_v01.R;
@@ -21,13 +23,20 @@ import com.squareup.picasso.Transformation;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.R.attr.id;
 
 
 public class FragmentDialogAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<CookActivity.struct_menu> mMenus;
 
+    private TextView order_menu_1;
+    private TextView order_menu_2;
+    private TextView order_menu_3;
+    private ImageView order_image;
 
+    private List<Integer> selected_items;
+    private List<Integer> list_selected_menus;
 
     public FragmentDialogAdapter(Activity activity, List<CookActivity.struct_menu> _menus) {
         //XML'i alıp View'a çevirecek inflater'ı örnekleyelim
@@ -41,7 +50,7 @@ public class FragmentDialogAdapter extends BaseAdapter {
         return mMenus.size();
     }
 
-    public int getMenuId(int id){
+    public int getMenuId(int id) {
         return mMenus.get(id).menu_id;
     }
 
@@ -57,40 +66,40 @@ public class FragmentDialogAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = new ViewHolder();
-        CookActivity.struct_menu menu = mMenus.get(position);
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        LinearLayout rowLayout = null;
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.dialog_fragment_design, null);
-
-             holder.holder_order_name_1 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_1);
-             holder.holder_order_menu_2 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_2);
-             holder.holder_order_menu_3 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_3);
-             holder.holder_order_image = (ImageView) convertView.findViewById(R.id.image_put_on_sale_cook);
-            convertView.setTag(holder);
-        }else{
-            holder = (ViewHolder) convertView.getTag();
+        } else {
+            rowLayout = (LinearLayout) convertView;
         }
+        CookActivity.struct_menu menu = mMenus.get(position);
 
-        holder.holder_order_name_1.setText(menu.meal.get(0));
-        holder.holder_order_menu_2.setText(menu.meal.get(1));
-        holder.holder_order_menu_3.setText(menu.meal.get(2));
+        order_menu_1 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_1);
+        order_menu_2 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_2);
+        order_menu_3 = (TextView) convertView.findViewById(R.id.text_put_on_sale_menu_3);
+        order_image = (ImageView) convertView.findViewById(R.id.image_put_on_sale_cook);
 
-        String url = "http://nepismis.afakan.net/images/yemek/" + menu.order_picture_id +  ".jpg";
+
+        order_menu_1.setText(menu.meal.get(0));
+        order_menu_2.setText(menu.meal.get(1));
+        order_menu_3.setText(menu.meal.get(2));
+
+        String url = "http://nepismis.afakan.net/images/yemek/" + menu.order_picture_id + ".jpg";
 
         Picasso.with(mInflater.getContext()).load(url).fit().centerCrop()
                 .placeholder(R.mipmap.ic_launcher_ne_pismis)
                 .error(R.mipmap.ic_launcher_ne_pismis)
-                .into(holder.holder_order_image);
+                .into(order_image);
+
+
+
 
 
         return convertView;
     }
 
 }
-       class ViewHolder {
-        TextView holder_order_name_1;
-        TextView holder_order_menu_2;
-        TextView holder_order_menu_3;
-        ImageView holder_order_image;
-    }
+
+

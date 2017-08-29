@@ -3,6 +3,7 @@ package com.example.ayzr.nepismis_v01;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -229,6 +230,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
         bundle.putInt("current_tab_index",current_tab_index);
         dFragment.setArguments(bundle);
         dFragment.show(fm, "Dialog Fragment");
+
     }
 
     @Override

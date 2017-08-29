@@ -15,6 +15,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +36,15 @@ import java.util.List;
 
 public class CommentsAdapter extends BaseAdapter {
 
-
     private LayoutInflater mInflater;
     private List<CommentsActivity.struct_comments> mCommentsList;
-    private CommentViewHolder holder;
+
+    private TextView text_comment;
+    private TextView text_comment_name;
+    private Button button_answer;
+    private RatingBar rating;
+    private TextView text_answer;
+    private EditText edit_answer;
 
 
     public CommentsAdapter(Activity activity, List<CommentsActivity.struct_comments> comments) {
@@ -66,52 +72,53 @@ public class CommentsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-         holder = new CommentViewHolder();
+        // holder = new CommentViewHolder();
 
-       // final View satirView;
+        // final View satirView;
+
+        LinearLayout rowLayout = null;
+
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.comments_list_row_design, null);
-
-            holder.text_comment = (TextView) convertView.findViewById(R.id.textComment);
-            holder.text_comment_name = (TextView) convertView.findViewById(R.id.text_comment_name);
-            holder.button_answer = (Button) convertView.findViewById(R.id.button_comments_answer);
-            holder.rating = (RatingBar) convertView.findViewById(R.id.rating_comment);
-            holder.text_answer = (TextView) convertView.findViewById(R.id.text_answer);
-            holder.edit_answer = (EditText) convertView.findViewById(R.id.editText_add_comment);
-        }else{
-            holder = (CommentViewHolder) convertView.getTag();
+        } else {
+            rowLayout = (LinearLayout) convertView;
         }
 
+         text_comment = (TextView) convertView.findViewById(R.id.textComment);
+         text_comment_name = (TextView) convertView.findViewById(R.id.text_comment_name);
+         button_answer = (Button) convertView.findViewById(R.id.button_comments_answer);
+         rating = (RatingBar) convertView.findViewById(R.id.rating_comment);
+         text_answer = (TextView) convertView.findViewById(R.id.text_answer);
+         edit_answer = (EditText) convertView.findViewById(R.id.editText_add_comment);
 
 
         final CommentsActivity.struct_comments co = mCommentsList.get(position);
 
-        holder.text_comment.setText(co.comment);
-        holder.text_comment_name.setText(co.comment_owner_name.charAt(0) + " ... " + co.comment_owner_name.charAt(co.comment_owner_name.length() - 1));
-        holder.rating.setRating((float) co.commenr_rating);
+        text_comment.setText(co.comment);
+        text_comment_name.setText(co.comment_owner_name.charAt(0) + " ... " + co.comment_owner_name.charAt(co.comment_owner_name.length() - 1));
+        rating.setRating((float) co.commenr_rating);
 
 
         if (co.cook_ans.equals("")) {
-            holder.edit_answer.setVisibility(View.VISIBLE);
-            holder.button_answer.setVisibility(View.VISIBLE);
+            edit_answer.setVisibility(View.VISIBLE);
+            button_answer.setVisibility(View.VISIBLE);
         } else {
-            holder.text_answer.setVisibility(View.VISIBLE);
+            text_answer.setVisibility(View.VISIBLE);
             if (co.confirm == 0)
-                holder.text_answer.setText(co.cook_ans + " \n(Onay Bekleniyor)");
+                text_answer.setText(co.cook_ans + " \n(Onay Bekleniyor)");
             else
-                holder.text_answer.setText(co.cook_ans);
+                text_answer.setText(co.cook_ans);
         }
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(holder.button_answer.getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(button_answer.getContext());
 
         builder.setTitle("Onay");
         builder.setMessage("Emin miyiz?");
 
-        final CommentViewHolder finalHolder = holder;
         builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
 
             public void onClick(DialogInterface dialog, int which) {
-                send_comment_answer(co.comment_id, finalHolder.edit_answer.getText().toString());
+                send_comment_answer(co.comment_id, edit_answer.getText().toString());
                 dialog.dismiss();
             }
         });
@@ -124,13 +131,11 @@ public class CommentsAdapter extends BaseAdapter {
             }
         });
 
-        final CommentViewHolder finalHolder1 = holder;
         final View finalConvertView = convertView;
-        holder.button_answer.setOnClickListener(new View.OnClickListener() {
+        button_answer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String str = finalHolder1.edit_answer.getText().toString();
-                if (!finalHolder1.edit_answer.getText().toString().isEmpty())
+                if (!edit_answer.getText().toString().isEmpty())
                     builder.show();
                 else
                     Snackbar.make(finalConvertView, "Rica ederim boş mesaj ekleme", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
@@ -148,7 +153,7 @@ public class CommentsAdapter extends BaseAdapter {
 
         HashMap<String, String> params_db;
 
-        AccountDatabase accountDatabase = new AccountDatabase(holder.button_answer.getContext());
+        AccountDatabase accountDatabase = new AccountDatabase(button_answer.getContext());
         params_db = accountDatabase.kullaniciDetay();
 
         HttpCall httpCall = new HttpCall();
@@ -168,11 +173,11 @@ public class CommentsAdapter extends BaseAdapter {
                     JSONObject initial = new JSONObject(response);
                     int saved = initial.getInt("save");
                     if (saved == 1) {
-                        Toast.makeText(holder.button_answer.getContext(), "Yorum başarıyla eklendi :)", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(button_answer.getContext(), "Yorum başarıyla eklendi :)", Toast.LENGTH_SHORT).show();
                         callBack();
 
                     } else {
-                        Toast.makeText(holder.button_answer.getContext(), "Yorum eklenemedi :(", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(button_answer.getContext(), "Yorum eklenemedi :(", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -183,14 +188,4 @@ public class CommentsAdapter extends BaseAdapter {
     }
 
 
-    class CommentViewHolder {
-
-        TextView text_comment ;
-        TextView text_comment_name ;
-        Button button_answer;
-        RatingBar rating;
-        TextView text_answer;
-        EditText edit_answer ;
-
-    }
 }
