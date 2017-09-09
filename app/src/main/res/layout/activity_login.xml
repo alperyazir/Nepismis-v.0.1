@@ -17,7 +17,7 @@
         android:hint="Username"
         android:inputType="textEmailAddress"
         android:paddingLeft="0dp"
-        android:text="asci@nepismis.com"
+        android:text="asci1@nepismis.com"
         android:textColor="#000000"
         android:textColorHint="#999" />
 

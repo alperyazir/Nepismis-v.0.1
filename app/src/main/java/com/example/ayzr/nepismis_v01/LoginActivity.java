@@ -115,8 +115,8 @@ public class LoginActivity extends AppCompatActivity {
                         db.kullaniciEkle(username, password, ""+user_id);
 
                         tokenGonder(user_id,FirebaseTokenAl.refreshedToken);
-                        startActivity(new Intent(getApplicationContext(),CookActivity.class));
-                        finish();
+
+
                     }
 
                 } catch (JSONException e) {
@@ -156,13 +156,23 @@ public class LoginActivity extends AppCompatActivity {
                 super.onResponse(response);
                 try {
 
-                    JSONObject obje55 = new JSONObject(response);
+                    JSONObject initial = new JSONObject(response);
+                    int saved = initial.getInt("save");
+                    if (saved == 1) {
+                        Toast.makeText(getApplicationContext(), "Token Successful :)", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(),CookActivity.class));
+                        finish();
+
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Token crash :(", Toast.LENGTH_SHORT).show();
+                    }
 
 
                 } catch (JSONException e) {
                     e.printStackTrace();
 
-                    Toast.makeText(getApplicationContext(),"Başarısız!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(),"Başarısız Token!",Toast.LENGTH_SHORT).show();
 
                 }
                 return null;

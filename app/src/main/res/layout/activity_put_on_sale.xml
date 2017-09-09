@@ -24,7 +24,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_put_on_sale__tag"
+                android:id="@+id/txt_put_on_sale_tag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -38,81 +38,98 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/cook_order_list_row_design"
-            android:orientation="horizontal"
+            android:gravity="center"
+            android:orientation="vertical"
             tools:layout_editor_absoluteX="8dp"
             tools:layout_editor_absoluteY="8dp">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp">
-
-                <ImageView
-                    android:id="@+id/image_put_on_sale_cook"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:srcCompat="@mipmap/ic_launcher"
-                    tools:layout_editor_absoluteX="8dp"
-                    tools:layout_editor_absoluteY="108dp" />
-
-                <RatingBar
-                    android:id="@+id/rating_put_on_sale"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:numStars="5"
-                    android:rating="5"
-                    android:stepSize=".1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                tools:layout_editor_absoluteX="8dp"
-                tools:layout_editor_absoluteY="8dp">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/cook_order_list_row_design"
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/comments_row_design"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/text_put_on_sale_menu_1"
+                    <ImageView
+                        android:id="@+id/imge_put_on_sale_cook"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Karnıyarık" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:src="@mipmap/ic_launcher_ne_pismis" />
 
-                    <TextView
-                        android:id="@+id/text_put_on_sale_evening_2"
+                    <RatingBar
+                        style="@style/Widget.AppCompat.RatingBar.Small"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Pilav" />
-
-                    <TextView
-                        android:id="@+id/text_put_on_sale_menu_3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Cacık" />
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:numStars="5"
+                        android:rating="5"
+                        android:stepSize=".1" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/text_put_on_sale_vote_count"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="14 oy" />
+                    android:layout_height="match_parent"
+                    android:layout_weight="0"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/comments_row_design"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_put_on_sale_menu_1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:text="" />
+
+                            <TextView
+                                android:id="@+id/txt_put_on_sale_menu_2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:text="" />
+
+                            <TextView
+                                android:id="@+id/txt_put_on_sale_menu_3"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_horizontal"
+                                android:maxLines="1"
+                                android:text="" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="0"
+                            android:orientation="horizontal">
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
 
             </LinearLayout>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -122,8 +139,8 @@
                 tools:layout_editor_absoluteY="8dp">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     tools:layout_editor_absoluteX="8dp"
                     tools:layout_editor_absoluteY="8dp">
@@ -131,7 +148,7 @@
                     <Button
                         android:id="@+id/button_put_on_sale_decrease"
                         android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_height="match_parent"
                         android:layout_marginRight="3dp"
                         android:background="@drawable/put_on_sale_decrease"
                         android:onClick="button_put_on_sale_decrease_clicked" />
@@ -151,7 +168,7 @@
                     <Button
                         android:id="@+id/button_put_on_sale_increase"
                         android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_height="match_parent"
                         android:background="@drawable/put_on_sale_increase"
                         android:onClick="button_put_on_sale_increase_clicked" />
                 </LinearLayout>
