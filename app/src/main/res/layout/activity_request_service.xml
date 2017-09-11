@@ -33,7 +33,7 @@
             tools:layout_editor_absoluteY="45dp" />
 
         <Button
-            android:id="@+id/send_request"
+            android:id="@+id/button_send_request"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/main_round_button_cook_design"
