@@ -1,0 +1,63 @@
+{
+  "project_info": {
+    "project_number": "968874694036",
+    "firebase_url": "https://nepismis-2132f.firebaseio.com",
+    "project_id": "nepismis-2132f",
+    "storage_bucket": "nepismis-2132f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968874694036:android:a9f9c8fef9d49944",
+        "android_client_info": {
+          "package_name": "com.example.ayzr.nepismis_v01"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968874694036-78kf6aqha43njp9ej8k7b44c079mbmft.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ayzr.nepismis_v01",
+            "certificate_hash": "b47bb42d0b2518e190a18c21ab7d722259f7583f"
+          }
+        },
+        {
+          "client_id": "968874694036-abqf3mf5c0h1p7kf7gcqkkc91m5n69pq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ayzr.nepismis_v01",
+            "certificate_hash": "21eeb677fc731943f76901aa0f65b70ed91ee44c"
+          }
+        },
+        {
+          "client_id": "968874694036-ms25gln78auc32gtbtirkf69376jr4mh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTzp3Aq-2AxqhVxPOf8MydHiblm04QtZw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968874694036-ms25gln78auc32gtbtirkf69376jr4mh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
