@@ -37,10 +37,10 @@
             android:layout_height="400dp"
             android:clickable="false"
             android:focusable="false"
+            android:choiceMode="singleChoice"
             android:focusableInTouchMode="false"
             tools:layout_editor_absoluteX="8dp"
-            tools:layout_editor_absoluteY="8dp"
-/>
+            tools:layout_editor_absoluteY="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"

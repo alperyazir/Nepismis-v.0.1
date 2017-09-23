@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -19,6 +21,7 @@ public class SplashActivity extends AppCompatActivity {
             window.setStatusBarColor(this.getResources().getColor(R.color.colorBackground));
         }
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
         new Handler().postDelayed(new Runnable() {
             @Override

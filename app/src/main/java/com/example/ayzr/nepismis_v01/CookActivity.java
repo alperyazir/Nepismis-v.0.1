@@ -51,6 +51,9 @@ public class CookActivity extends AppCompatActivity
 
     private ListView listView;
 
+    SharedPreferences pref;
+    SharedPreferences.Editor editor ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +63,9 @@ public class CookActivity extends AppCompatActivity
 
         setTitle(R.string.cook_activity_name);
         listView = (ListView) findViewById(R.id.list_order);
+
+        pref = getApplicationContext().getSharedPreferences("Login_pref", 0); // 0 - for private mode
+        editor = pref.edit();
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -208,9 +214,8 @@ public class CookActivity extends AppCompatActivity
         } else if (id == R.id.nav_help) {
             addNotification();
         } else if (id == R.id.nav_sign_out) {
-
-            AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
-            accountDatabase.resetTables();
+            editor.clear();
+            editor.commit();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
 

@@ -66,6 +66,7 @@ public class MenusDialogFragment extends DialogFragment {
     private List<Long> selected_items;
     private List<Integer> list_selected_menus;
     private int current_tab_index;
+    private FragmentDialogAdapter fmAdapter;
 
 
     @Override
@@ -91,29 +92,36 @@ public class MenusDialogFragment extends DialogFragment {
 
         selected_items = new ArrayList<Long>();
         list_selected_menus = new ArrayList<Integer>();
+        list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 
 
         list.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+                        // Set the item as checked to be highlighted
+                        list.setItemChecked(position, true);
+                        fmAdapter.notifyDataSetChanged();
+
+                        CookActivity.struct_menu m = (CookActivity.struct_menu) parent.getItemAtPosition((int) id);
+
                         if (!selected_items.contains(id)) {
                             if (selected_items.size() < 3) {
                                 selected_items.add(id);
                                 view.setBackgroundResource(R.color.colorToggleOff);
-                                CookActivity.struct_menu m = (CookActivity.struct_menu) parent.getItemAtPosition(position);
                                 list_selected_menus.add(m.menu_id);
                             } else {
                                 Toast.makeText(getContext(), "3'den fazla seçilemez", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            selected_items.remove(id);
+                            selected_items.remove(selected_items.indexOf(id));
                             view.setBackgroundResource(R.color.colorWhite);
-                            CookActivity.struct_menu m = (CookActivity.struct_menu) parent.getItemAtPosition(position);
-                            list_selected_menus.remove(m.menu_id);
+                            list_selected_menus.remove(list_selected_menus.indexOf(m.menu_id));
                         }
                     }
+
                 }
+
         );
 
 
@@ -291,7 +299,7 @@ public class MenusDialogFragment extends DialogFragment {
     }
 
     private void send_to_dialog(List<CookActivity.struct_menu> menu) {
-        final FragmentDialogAdapter fmAdapter = new FragmentDialogAdapter(getActivity(), menu);
+        fmAdapter = new FragmentDialogAdapter(getActivity(), menu,list_selected_menus);
         list.setAdapter(fmAdapter);
     }
 

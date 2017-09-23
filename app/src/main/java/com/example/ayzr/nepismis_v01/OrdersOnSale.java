@@ -121,6 +121,7 @@ public class OrdersOnSale extends AppCompatActivity {
                     count_remain_menu = initial.getInt("porsiyon");
                     rating_no = initial.getDouble("puan");
                     menu = new CookActivity.struct_menu();
+                    menu.menu_id = initial.getInt("menu_id");
 
                     JSONArray array_menu = initial.getJSONArray("menusatis");
                     for (int i = 0; i < array_menu.length(); i++) {
@@ -178,6 +179,7 @@ public class OrdersOnSale extends AppCompatActivity {
         httpCall.setUrl("http://nepismis.afakan.net/android/satisMenuSil");
         HashMap<String, String> params = new HashMap<>();
         params.put("user_id", params_db.get("tarih"));
+        params.put("menu_id", ""+menu.menu_id);
         httpCall.setParams(params);
 
         new HttpRequest() {

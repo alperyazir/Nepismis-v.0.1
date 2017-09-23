@@ -1,14 +1,20 @@
 package com.example.ayzr.nepismis_v01;
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.ayzr.nepismis_v01.Market.MarkerOrdes;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,8 +33,13 @@ public class LoginActivity extends AppCompatActivity {
     private String username;
     private String password;
     private int user_id;
+    public static int role;
 
     private ProgressDialog progress;
+
+    SharedPreferences pref;
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         // Address the email and password field
         emailEditText = (EditText) findViewById(R.id.username);
         passEditText = (EditText) findViewById(R.id.password);
-
+        pref = getApplicationContext().getSharedPreferences("Login_pref", 0); // 0 - for private mode
+        editor = pref.edit();
     }
 
     public void checkLogin(View arg0) {
@@ -53,7 +65,7 @@ public class LoginActivity extends AppCompatActivity {
             passEditText.setError("Password cannot be empty");
         }
 
-        if(isValidEmail(email) && isValidPassword(pass)) {
+        if (isValidEmail(email) && isValidPassword(pass)) {
             try_login();
         }
     }
@@ -76,12 +88,12 @@ public class LoginActivity extends AppCompatActivity {
         return false;
     }
 
-    private void try_login(){
+    private void try_login() {
 
-         if(!isNetworkAvailable()) {
-             Toast.makeText(getApplicationContext(),"No internet access!",Toast.LENGTH_SHORT).show();
-             return;
-         }
+        if (!isNetworkAvailable()) {
+            Toast.makeText(getApplicationContext(), "No internet access!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         progress = new ProgressDialog(this);
         progress.setMessage("Logging in ...");
         progress.setIndeterminate(true);
@@ -90,11 +102,11 @@ public class LoginActivity extends AppCompatActivity {
         HttpCall httpCall = new HttpCall();
         httpCall.setMethodtype(HttpCall.GET);
         httpCall.setUrl("http://nepismis.afakan.net/android/gonder");
-        HashMap<String,String> params = new HashMap<>();
-        params.put("name",emailEditText.getText().toString());
-        params.put("password",passEditText.getText().toString());
+        HashMap<String, String> params = new HashMap<>();
+        params.put("name", emailEditText.getText().toString());
+        params.put("password", passEditText.getText().toString());
         httpCall.setParams(params);
-        new HttpRequest(){
+        new HttpRequest() {
             @Override
             public List<CookActivity.struct_menu> onResponse(String response) {
                 super.onResponse(response);
@@ -102,27 +114,32 @@ public class LoginActivity extends AppCompatActivity {
                     progress.dismiss();
                     JSONObject obje = new JSONObject(response);
                     is_login = obje.getBoolean("giris");
+                    role = obje.getInt("role");
                     JSONObject user = obje.getJSONObject("user");
                     user_id = user.getInt("id");
 
                     username = user.getString("email");
                     password = user.getString("password");
 
-                    if(is_login){
+                    if (is_login) {
 
                         AccountDatabase db = new AccountDatabase(getApplicationContext());
-                        db.resetTables();
-                        db.kullaniciEkle(username, password, ""+user_id);
+                        //db.resetTables();
+                        db.kullaniciEkle(username, password, "" + user_id, "" + role);
 
-                        tokenGonder(user_id,FirebaseTokenAl.refreshedToken);
+                        editor.putString("username", username);
+                        editor.putString("password", password);
+                        editor.putInt("user_id", user_id);
+                        editor.putInt("role", role);
+                        editor.commit(); // commit changes
 
-
+                        tokenGonder(user_id, FirebaseInstanceId.getInstance().getToken());
                     }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    if(!is_login){
-                        Toast.makeText(getApplicationContext(),"Başarısız!",Toast.LENGTH_SHORT).show();
+                    if (!is_login) {
+                        Toast.makeText(getApplicationContext(), "Başarısız!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 return null;
@@ -131,56 +148,53 @@ public class LoginActivity extends AppCompatActivity {
         }.execute(httpCall);
     }
 
-        private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public  void tokenGonder(int user,String token)
-    {
-        HashMap<String, String> params_db;
-        AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
-        params_db = accountDatabase.kullaniciDetay();
+    public void tokenGonder(int user, String token) {
+        HttpCall httpCall = new HttpCall();
+        httpCall.setMethodtype(HttpCall.GET);
+        httpCall.setUrl("http://nepismis.afakan.net/android/tokenYaz");
+        HashMap<String, String> params = new HashMap<>();
+        params.put("token", token);
 
-        HttpCall httpCall2 = new HttpCall();
-        httpCall2.setMethodtype(HttpCall.GET);
-        httpCall2.setUrl("http://nepismis.afakan.net/android/tokenYaz");
-        HashMap<String,String> params = new HashMap<>();
-        params.put("token",token);
-        params.put("user_id",params_db.get("tarih"));
-        httpCall2.setParams(params);
-        new HttpRequest(){
+        params.put("user_id", pref.getString("username", null));
+        httpCall.setParams(params);
+        new HttpRequest() {
             @Override
             public List<CookActivity.struct_menu> onResponse(String response) {
                 super.onResponse(response);
                 try {
-
                     JSONObject initial = new JSONObject(response);
                     int saved = initial.getInt("save");
                     if (saved == 1) {
                         Toast.makeText(getApplicationContext(), "Token Successful :)", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(),CookActivity.class));
+                        if (pref.getInt("role", 0) == 3) {      // Market
+                            startActivity(new Intent(getApplicationContext(), CookActivity.class));
+                        } else if (pref.getInt("role", 0) == 4) { // Kurye
+
+                        } else if (pref.getInt("role", 0) == 5) { // Aşçı
+                            startActivity(new Intent(getApplicationContext(), MarkerOrdes.class));
+                        }
                         finish();
 
 
                     } else {
                         Toast.makeText(getApplicationContext(), "Token crash :(", Toast.LENGTH_SHORT).show();
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
-
-                    Toast.makeText(getApplicationContext(),"Başarısız Token!",Toast.LENGTH_SHORT).show();
-
+                    if (!is_login) {
+                        Toast.makeText(getApplicationContext(), "Başarısız!", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 return null;
             }
 
-        }.execute(httpCall2);
+        }.execute(httpCall);
 
     }
-
-
 }

@@ -42,7 +42,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
 
     private ProgressDialog progress;
     final List<CookActivity.struct_menu> menus_morning = new ArrayList<>();
-    final List<CookActivity.struct_menu> menus_noon    = new ArrayList<>();
+    final List<CookActivity.struct_menu> menus_noon = new ArrayList<>();
     final List<CookActivity.struct_menu> menus_evening = new ArrayList<>();
     private int current_tab_index;
     FragmentManager fm = getSupportFragmentManager();
@@ -61,7 +61,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
                     return true;
                 case R.id.navigation_dashboard:
                     survey_list.setAdapter(null);
-                    current_tab_index =2;
+                    current_tab_index = 2;
                     parser(2);
                     return true;
                 case R.id.navigation_notifications:
@@ -88,10 +88,10 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Snackbar.make(view, "Anket eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
-              //          .setAction("Action", null).show();
+                //  Snackbar.make(view, "Anket eklenecek sıkıntı yok :)", Snackbar.LENGTH_LONG)
+                //          .setAction("Action", null).show();
                 send_to_dialog();
-        }
+            }
         });
 
         survey_list = (ListView) findViewById(R.id.survey_list);
@@ -101,8 +101,8 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
         parser(current_tab_index);
     }
 
-    public void parser(final int it){
-        if(isNetworkAvailable()) {
+    public void parser(final int it) {
+        if (isNetworkAvailable()) {
             progress = new ProgressDialog(this);
             progress.setMessage("Checking surveys...");
             progress.setIndeterminate(true);
@@ -151,7 +151,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
                                     menus_morning.add(j, m);
                                 }
                                 update_morning_menus(menus_morning);
-                            } else if(ogun == 2 && it == 2){ // Öğle anketleri
+                            } else if (ogun == 2 && it == 2) { // Öğle anketleri
                                 for (int j = 0; j < anket_array.length(); j++) {
                                     JSONObject json_anket = anket_array.getJSONObject(j);
                                     JSONArray menu_anket = json_anket.getJSONArray("menuanket");
@@ -166,7 +166,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
                                     menus_noon.add(j, m);
                                 }
                                 update_noon_menus(menus_noon);
-                            }else if(ogun == 3 && it == 3){ // Akşam anketleri
+                            } else if (ogun == 3 && it == 3) { // Akşam anketleri
                                 for (int j = 0; j < anket_array.length(); j++) {
                                     JSONObject json_anket = anket_array.getJSONObject(j);
                                     JSONArray menu_anket = json_anket.getJSONArray("menuanket");
@@ -195,17 +195,17 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
         }
     }
 
-    private void update_morning_menus(List<CookActivity.struct_menu> menus_m){
+    private void update_morning_menus(List<CookActivity.struct_menu> menus_m) {
         QuestionnarieAdapter morning_adapter = new QuestionnarieAdapter(this, menus_m);
         survey_list.setAdapter(morning_adapter);
     }
 
-    private void update_noon_menus(List<CookActivity.struct_menu> menu_n){
+    private void update_noon_menus(List<CookActivity.struct_menu> menu_n) {
         QuestionnarieAdapter noon_adapter = new QuestionnarieAdapter(this, menu_n);
         survey_list.setAdapter(noon_adapter);
     }
 
-    private void update_evening_menus(List<CookActivity.struct_menu> menu_e){
+    private void update_evening_menus(List<CookActivity.struct_menu> menu_e) {
         QuestionnarieAdapter evening_adapter = new QuestionnarieAdapter(this, menu_e);
         survey_list.setAdapter(evening_adapter);
     }
@@ -217,17 +217,17 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
     }
 
     private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager  = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    private void send_to_dialog(){
+    private void send_to_dialog() {
         MenusDialogFragment dFragment = new MenusDialogFragment();
         // Show DialogFragment
 
         Bundle bundle = new Bundle();
-        bundle.putInt("current_tab_index",current_tab_index);
+        bundle.putInt("current_tab_index", current_tab_index);
         dFragment.setArguments(bundle);
         dFragment.show(fm, "Dialog Fragment");
 
@@ -235,7 +235,7 @@ public class Survey_activity extends AppCompatActivity implements DialogInterfac
 
     @Override
     public void onDismiss(final DialogInterface dialog) {
-       parser(current_tab_index);
+        parser(current_tab_index);
     }
 
 }

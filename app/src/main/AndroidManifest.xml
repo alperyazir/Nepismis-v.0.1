@@ -42,19 +42,16 @@
         <activity
             android:name=".ManuActivity"
             android:label="@string/title_activity_manu" />
+        <activity
+            android:name=".Market.MarkerOrdes"
+            android:label="@string/title_activity_marker_ordes"
+            android:theme="@style/AppTheme.NoActionBar" />
 
-        <service
-            android:name=".FirebaseMesaj">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".FirebaseTokenAl">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
-            </intent-filter>
-        </service>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0333c868e1af6b3f07937dfac428dc6e289fd3de" />
+
+        <activity android:name=".Market.MarketPastOrders"></activity>
     </application>
 
 </manifest>

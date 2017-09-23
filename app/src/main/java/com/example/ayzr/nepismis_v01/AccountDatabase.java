@@ -21,6 +21,7 @@ public class AccountDatabase extends SQLiteOpenHelper {
     private static String KULLANICI_MAIL = "mail";
     private static String KULLANICI_SIFRE = "sifre";
     private static String KAYIT_TARIHI = "tarih";
+    private static String KAYIT_ROL = "role";
 
 
     public AccountDatabase(Context context) {
@@ -34,19 +35,21 @@ public class AccountDatabase extends SQLiteOpenHelper {
                 + KULLANICI_ID + " INTEGER PRIMARY KEY,"
                 + KULLANICI_MAIL + " TEXT,"
                 + KULLANICI_SIFRE + " TEXT,"
-                + KAYIT_TARIHI + " TEXT" + ")";
+                + KAYIT_TARIHI + " TEXT,"
+                + KAYIT_ROL + " TEXT" + ")";
         db.execSQL(CREATE_TABLE);
     }
 
 
 
-    public void kullaniciEkle(String mail,String sifre,String tarih) {
+    public void kullaniciEkle(String mail,String sifre,String tarih, String rol) {
         //kullaniciEkle methodu ise adı üstünde Databese veri eklemek için
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KULLANICI_MAIL, mail);
         values.put(KULLANICI_SIFRE, sifre);
         values.put(KAYIT_TARIHI, tarih);
+        values.put(KAYIT_ROL, rol);
 
         db.insert(TABLE_NAME, null, values);
         db.close(); //Database Bağlantısını kapattık*/
@@ -70,6 +73,7 @@ public class AccountDatabase extends SQLiteOpenHelper {
             kisi.put(KULLANICI_MAIL, cursor.getString(1));
             kisi.put(KULLANICI_SIFRE, cursor.getString(2));
             kisi.put(KAYIT_TARIHI, cursor.getString(3));
+            kisi.put(KAYIT_ROL, cursor.getString(4));
         }
         cursor.close();
         db.close();

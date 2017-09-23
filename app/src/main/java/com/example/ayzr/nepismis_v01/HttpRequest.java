@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by pethoalpar on 4/16/2016.
+ * Created  by pethoalpar on 4/16/2016.
  */
 public class HttpRequest extends AsyncTask<HttpCall, String, String>{
 
