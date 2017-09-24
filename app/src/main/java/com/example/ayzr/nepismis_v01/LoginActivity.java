@@ -172,11 +172,11 @@ public class LoginActivity extends AppCompatActivity {
                     int saved = initial.getInt("save");
                     if (saved == 1) {
                         Toast.makeText(getApplicationContext(), "Token Successful :)", Toast.LENGTH_SHORT).show();
-                        if (pref.getInt("role", 0) == 3) {      // Market
+                        if (pref.getInt("role", 0) == 3) {      // Aşcı
                             startActivity(new Intent(getApplicationContext(), CookActivity.class));
                         } else if (pref.getInt("role", 0) == 4) { // Kurye
 
-                        } else if (pref.getInt("role", 0) == 5) { // Aşçı
+                        } else if (pref.getInt("role", 0) == 5) { // Market
                             startActivity(new Intent(getApplicationContext(), MarkerOrdes.class));
                         }
                         finish();

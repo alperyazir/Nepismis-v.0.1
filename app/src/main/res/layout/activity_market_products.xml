@@ -4,11 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ayzr.nepismis_v01.Market.MarketPastOrders">
+    tools:context="com.example.ayzr.nepismis_v01.Market.MarketProducts">
 
     <ExpandableListView
-        android:id="@+id/expandable"
-        style="@android:style/Widget.DeviceDefault.Light.ExpandableListView"
+        android:id="@+id/market_products_expandable"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

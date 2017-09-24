@@ -12,18 +12,19 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
+import com.example.ayzr.nepismis_v01.Market.MarketPastOrders;
 import com.example.ayzr.nepismis_v01.R;
 
 
 public class Marker_Past_Orders_Expandable_List_Adapter extends BaseExpandableListAdapter {
 
     private Context _context;
-    private List<String> _listDataHeader; // header titles
+    private  List<MarketPastOrders.market_past_orders> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<MarketPastOrders.market_past_orders_details>> _listDataChild;
 
-    public Marker_Past_Orders_Expandable_List_Adapter(Context context, List<String> listDataHeader,
-                                                      HashMap<String, List<String>> listChildData) {
+    public Marker_Past_Orders_Expandable_List_Adapter(Context context,List<MarketPastOrders.market_past_orders> listDataHeader,
+                                                      HashMap<String, List<MarketPastOrders.market_past_orders_details>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -31,8 +32,7 @@ public class Marker_Past_Orders_Expandable_List_Adapter extends BaseExpandableLi
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .get(childPosititon);
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition).date).get(childPosititon);
     }
 
     @Override
@@ -44,24 +44,26 @@ public class Marker_Past_Orders_Expandable_List_Adapter extends BaseExpandableLi
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final MarketPastOrders.market_past_orders_details child = (MarketPastOrders.market_past_orders_details) getChild(groupPosition, childPosition);
 
-       // if (convertView == null) {
-       //     LayoutInflater infalInflater = (LayoutInflater) this._context
-       //             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-       //     convertView = infalInflater.inflate(R.layout.list_item, null);
-       // }
-//
-       // TextView txtListChild = (TextView) convertView
-       //         .findViewById(R.id.lblListItem);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.market_past_order_expandable_list_content_design, null);
+        }
 
-        //txtListChild.setText(childText);
+        TextView txtListChild_owner = (TextView) convertView.findViewById(R.id.market_past_order_expanable_list_content_design_product_owner);
+        TextView txtListChild_count = (TextView) convertView.findViewById(R.id.market_past_order_expanable_list_content_design_product_count);
+        TextView txtListChild_price = (TextView) convertView.findViewById(R.id.market_past_order_expanable_list_content_design_product_price);
+
+        txtListChild_owner.setText(child.owner);
+        txtListChild_count.setText(child.order_count + " Adet");
+        txtListChild_price.setText(child.order_price + " tl");
         return convertView;
     }
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition).date)
                 .size();
     }
 
@@ -82,7 +84,8 @@ public class Marker_Past_Orders_Expandable_List_Adapter extends BaseExpandableLi
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
+        MarketPastOrders.market_past_orders headerTitle = (MarketPastOrders.market_past_orders) getGroup(groupPosition);
+
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.market_past_order_expandable_list_group, null);
@@ -90,7 +93,11 @@ public class Marker_Past_Orders_Expandable_List_Adapter extends BaseExpandableLi
 
         TextView lblListHeader = (TextView) convertView.findViewById(R.id.text_market_past_order_expandable_date);
         lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
+        lblListHeader.setText(headerTitle.date.substring(0,10));
+
+        TextView lblListHeaderPrice = (TextView) convertView.findViewById(R.id.text_market_past_order_expandable_header_price);
+        lblListHeaderPrice.setTypeface(null, Typeface.BOLD);
+        lblListHeaderPrice.setText(headerTitle.total_price);
 
         return convertView;
     }

@@ -1,28 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="50dp"
     android:background="@drawable/main_round_button_cook_design"
     android:orientation="horizontal">
 
     <TextView
         android:id="@+id/text_market_past_order_expandable_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="50dp"
         android:layout_weight="1"
+        android:gravity="center_vertical"
         android:text="TextView"
-        android:textColor="@android:color/black"
-        android:textSize="25sp"
-        android:textStyle="bold" />
+        android:textSize="25sp" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/text_market_past_order_expandable_header_price"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginRight="20dp"
         android:layout_weight="1"
-        android:gravity="right"
+        android:gravity="right|center_vertical"
         android:text="TextView"
-        android:textColor="@android:color/black"
-        android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textSize="20sp" />
 </LinearLayout>

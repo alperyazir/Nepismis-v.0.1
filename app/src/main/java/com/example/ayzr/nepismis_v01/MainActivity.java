@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         pref = getApplicationContext().getSharedPreferences("Login_pref", 0); // 0 - for private mode
         editor = pref.edit();
 
-        if(check_login(getApplicationContext())) {//önceden giriş yapmış ise
+        if(check_login()) {//önceden giriş yapmış ise
             // setContentView(R.layout.activity_main);
            // HashMap<String, String> params_db;
            // AccountDatabase accountDatabase = new AccountDatabase(getApplicationContext());
@@ -42,9 +42,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public boolean check_login(Context context){
-       //AccountDatabase db = new AccountDatabase(context);
-       //int count = db.getRowCount();// databasedeki table logindeki row sayisi
+    public boolean check_login(){
         if(pref.getAll().size() > 0){//0 dan fazla ise giris yapmss onceden demek
             //kullanici giris yapmis
             return true;

@@ -46,11 +46,9 @@ public class CookActivity extends AppCompatActivity
     private long mBackPressed;
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
-
     private ProgressDialog progress;
 
     private ListView listView;
-
     SharedPreferences pref;
     SharedPreferences.Editor editor ;
 
