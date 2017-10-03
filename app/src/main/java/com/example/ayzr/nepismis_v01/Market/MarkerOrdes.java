@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,7 +43,13 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
     private long mBackPressed;
 
 
-    private ListView listView;
+    private ExpandableListView listView;
+
+    List<String> listDataHeader;
+    HashMap<String, List<MarkerOrdes.struct_market_order_details>> listDataChild;
+
+
+    List<struct_market_order> o_list;
 
 
     @Override
@@ -66,10 +73,14 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
         pref = getApplicationContext().getSharedPreferences("Login_pref", 0); // 0 - for private mode
         editor = pref.edit();
 
-        listView = (ListView) findViewById(R.id.list_market_orders);
+        listView = (ExpandableListView) findViewById(R.id.list_market_orders);
 
-        //parser();
-        update_orders();
+        o_list = new ArrayList<struct_market_order>();
+
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<MarkerOrdes.struct_market_order_details>>();
+
+        parser();
     }
 
     public void parser() {
@@ -91,10 +102,38 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
                     super.onResponse(response);
                     try {
                         progress.dismiss();
+                        //o_list.clear();
+                        listDataHeader.clear();
+                        listDataChild.clear();
+
                         JSONObject initial_object = new JSONObject(response);
                         JSONObject object_siparis = initial_object.getJSONObject("siparisler");
+                        JSONArray array_users = initial_object.getJSONArray("user");
+
+                        for (int i = 0; i < array_users.length(); i++) {
+
+                            JSONObject user_obj = array_users.getJSONObject(i);
+                            JSONArray array_user = object_siparis.getJSONArray("" + user_obj.getInt("user_id"));
 
 
+                            //s_d_list.clear();
+                            List<struct_market_order_details> s_d_list = new ArrayList<struct_market_order_details>();
+                            for (int j = 0; j < array_user.length(); j++) {
+                                JSONObject object_order = array_user.getJSONObject(j);
+                                JSONObject object_so = object_order.getJSONObject("urun");
+                                JSONObject object_usr = object_order.getJSONObject("user");
+
+                                if (!listDataHeader.contains(object_usr.getString("name")))
+                                    listDataHeader.add(object_usr.getString("name"));
+
+                                struct_market_order_details s_d = new struct_market_order_details();
+                                s_d.order_price = "" + object_so.getDouble("urun_fiyat");
+                                s_d.order_name = object_so.getString("urun_adi");
+                                s_d.order_count = object_order.getString("adet");
+                                s_d_list.add(s_d);
+                            }
+                            listDataChild.put(listDataHeader.get(i), s_d_list);
+                        }
                         update_orders();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -134,43 +173,12 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
         }
     }
 
-    public void update_orders(){
+    public void update_orders() {
         struct_market_order o = new struct_market_order();
         struct_market_order_details d = new struct_market_order_details();
-        d.order_count = "12";
-        d.order_name = "tırıvırı";
-        d.order_price= "12 tl";
 
-        struct_market_order_details d1 = new struct_market_order_details();
-        d1.order_count = "12";
-        d1.order_name = "tırıvırı";
-        d1.order_price= "12 tl";
-
-        struct_market_order_details d2 = new struct_market_order_details();
-        d2.order_count = "12";
-        d2.order_name = "tırıvırı";
-        d2.order_price= "12 tl";
-
-        List<struct_market_order_details> l = new ArrayList<struct_market_order_details>();
-        l.add(d);
-        l.add(d1);
-        l.add(d2);
-
-        o._market_order_owner = "alperyazir";
-        o.market_order_list_details.add(d);
-        o.market_order_list_details.add(d1);
-        o.market_order_list_details.add(d2);
-
-        List<struct_market_order> ss = new ArrayList<struct_market_order>();
-        ss.add(o);
-
-        listView.setAdapter(null);
-        Market_OrdersList_Adapter adapter = new Market_OrdersList_Adapter(this, ss){
-            @Override
-            public void callBack() {
-                parser();
-            }
-        };
+        //listView.setAdapter(null);
+        Market_OrdersList_Adapter adapter = new Market_OrdersList_Adapter(this, listDataHeader, listDataChild);
         listView.setAdapter(adapter);
     }
 
@@ -206,7 +214,6 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
 
     public static class struct_market_order {
         public String _market_order_owner;
-        public List<struct_market_order_details> market_order_list_details=  new ArrayList<struct_market_order_details>();;
     }
 
     public static class struct_market_order_details {

@@ -8,10 +8,8 @@
     tools:context="com.example.ayzr.nepismis_v01.Market.MarkerOrdes"
     tools:showIn="@layout/app_bar_marker_ordes">
 
-    <ListView
+    <ExpandableListView
         android:id="@+id/list_market_orders"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="8dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>

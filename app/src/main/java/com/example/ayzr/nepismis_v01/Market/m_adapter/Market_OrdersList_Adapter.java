@@ -6,12 +6,16 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +24,7 @@ import com.example.ayzr.nepismis_v01.CookActivity;
 import com.example.ayzr.nepismis_v01.HttpCall;
 import com.example.ayzr.nepismis_v01.HttpRequest;
 import com.example.ayzr.nepismis_v01.Market.MarkerOrdes;
+import com.example.ayzr.nepismis_v01.Market.MarketProducts;
 import com.example.ayzr.nepismis_v01.R;
 import com.squareup.picasso.Picasso;
 
@@ -29,132 +34,108 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.List;
 
-public class Market_OrdersList_Adapter extends BaseAdapter {
+import static com.example.ayzr.nepismis_v01.R.id.market_order_layout;
 
-    private LayoutInflater mInflater;
-    private List<MarkerOrdes.struct_market_order> mOrderList;
-    private Button button_ready;
-    private ProgressDialog progress;
+public class Market_OrdersList_Adapter extends BaseExpandableListAdapter {
 
 
-    public Market_OrdersList_Adapter(Activity activity, List<MarkerOrdes.struct_market_order> orders) {
-        //XML'i alıp View'a çevirecek inflater'ı örnekleyelim
-        mInflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        //gösterilecek listeyi de alalım
-        mOrderList = orders;
+    private Context _context;
+    private List<String> _listDataHeader; // header titles
+    // child data in format of header title, child title
+    private HashMap<String, List<MarkerOrdes.struct_market_order_details>> _listDataChild;
+
+    public Market_OrdersList_Adapter(Context context, List<String> listDataHeader, HashMap<String, List<MarkerOrdes.struct_market_order_details>> listChildData) {
+        this._context = context;
+        this._listDataHeader = listDataHeader;
+        this._listDataChild = listChildData;
     }
 
     @Override
-    public int getCount() {
-        return mOrderList.size();
+    public Object getChild(int groupPosition, int childPosititon) {
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                .get(childPosititon);
     }
 
     @Override
-    public MarkerOrdes.struct_market_order getItem(int position) {
-        //şöyle de olabilir: public Object getItem(int position)
-        return mOrderList.get(position);
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
+    public View getChildView(int groupPosition, final int childPosition,
+                             boolean isLastChild, View convertView, ViewGroup parent) {
+
+        final MarkerOrdes.struct_market_order_details  childText = (MarkerOrdes.struct_market_order_details) getChild(groupPosition, childPosition);
+
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.list_market_order_row_design, null);
+        }
+
+        TextView txtListChild_name = (TextView) convertView.findViewById(R.id.market_order_name);
+        TextView txtListChild_price = (TextView) convertView.findViewById(R.id.txt_market_product_price);
+        TextView txtListChild_count = (TextView) convertView.findViewById(R.id.txt_market_product_count);
+        LinearLayout lay = (LinearLayout) convertView.findViewById(R.id.market_order_layout);
+
+
+
+        txtListChild_name.setText(childText.order_name);
+        txtListChild_price.setText(childText.order_price);
+        txtListChild_count.setText(childText.order_count);
+
+        if(!isLastChild){
+            lay.setVisibility(View.GONE);
+        }
+
+        return convertView;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        View satirView;
-        satirView = mInflater.inflate(R.layout.list_market_order_row_design, null);
-
-        TextView order_owner = (TextView) satirView.findViewById(R.id.txt_market_orders_owner);
-        TextView order_count = (TextView) satirView.findViewById(R.id.txt_market_order_count);
-        TextView order_name = (TextView) satirView.findViewById(R.id.txt_market_order_name);
-        TextView order_price = (TextView) satirView.findViewById(R.id.txt_market_order_price);
-
-        button_ready = (Button) satirView.findViewById(R.id.btn_market_order_ready);
-
-
-        MarkerOrdes.struct_market_order market_order= mOrderList.get(position);
-
-        order_owner.setText(market_order._market_order_owner);
-        order_count.setText( market_order.market_order_list_details.get(position).order_count);
-        order_name.setText(market_order.market_order_list_details.get(position).order_name);
-        order_price.setText(market_order.market_order_list_details.get(position).order_price);
-
-
-
-
-      //final AlertDialog.Builder builder = new AlertDialog.Builder(button_ready.getContext());
-
-      //builder.setTitle("Onay");
-      //builder.setMessage("Emin miyiz?");
-
-      //builder.setPositiveButton("EVET", new DialogInterface.OnClickListener() {
-
-      //    public void onClick(DialogInterface dialog, int which) {
-      //        send_order_ready(cook.order_id);
-      //        dialog.dismiss();
-      //    }
-      //});
-
-      //builder.setNegativeButton("HAYIR", new DialogInterface.OnClickListener() {
-
-      //    @Override
-      //    public void onClick(DialogInterface dialog, int which) {
-      //        dialog.dismiss();
-      //    }
-      //});
-
-    // button_ready.setOnClickListener(new View.OnClickListener() {
-    //     @Override
-    //     public void onClick(View v) {
-    //         builder.show();
-    //     }
-    // });
-
-
-        return satirView;
+    public int getChildrenCount(int groupPosition) {
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+                .size();
     }
 
-    private void send_order_ready(int id) {
-        HashMap<String, String> params_db;
-        AccountDatabase accountDatabase = new AccountDatabase(button_ready.getContext());
-        params_db = accountDatabase.kullaniciDetay();
-
-
-        HttpCall httpCall = new HttpCall();
-        httpCall.setMethodtype(HttpCall.GET);
-        httpCall.setUrl("http://nepismis.afakan.net/android/siparisOnay");
-        HashMap<String, String> params = new HashMap<>();
-        params.put("user_id", params_db.get("tarih"));
-        params.put("siparis_id", "" + id);
-        httpCall.setParams(params);
-
-        new HttpRequest() {
-            @Override
-            public List<CookActivity.struct_menu> onResponse(String response) {
-                super.onResponse(response);
-                try {
-
-                    JSONObject object = new JSONObject(response);
-                    boolean b = object.getBoolean("save");
-                    if (b) {
-                        Toast.makeText(button_ready.getContext(), "Sipariş onaylandı :)", Toast.LENGTH_SHORT).show();
-                        callBack();
-                    } else {
-                        Toast.makeText(button_ready.getContext(), "Sipariş Onaylanamadı ! :)", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-        }.execute(httpCall);
-
+    @Override
+    public Object getGroup(int groupPosition) {
+        return this._listDataHeader.get(groupPosition);
     }
 
-    public void callBack(){}
+    @Override
+    public int getGroupCount() {
+        return this._listDataHeader.size();
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded,
+                             View convertView, ViewGroup parent) {
+        String headerTitle = (String) getGroup(groupPosition);
+        if (convertView == null) {
+            LayoutInflater infalInflater = (LayoutInflater) this._context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = infalInflater.inflate(R.layout.market_orders_header_layour, null);
+        }
+
+        TextView lblListHeader = (TextView) convertView.findViewById(R.id.txt_market_order_header);
+        lblListHeader.setTypeface(null, Typeface.BOLD);
+        lblListHeader.setText(headerTitle);
+
+        return convertView;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return true;
+    }
 }
-
