@@ -36,29 +36,4 @@
             android:textSize="16sp" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/market_order_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_market_order_ready"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/main_round_button_cook_design"
-            android:text="Sipariş Hazır" />
-
-        <Button
-            android:id="@+id/btn_total_price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/main_round_button_cook_design"
-            android:text="Toplam 0 tl" />
-
-    </LinearLayout>
 </LinearLayout>

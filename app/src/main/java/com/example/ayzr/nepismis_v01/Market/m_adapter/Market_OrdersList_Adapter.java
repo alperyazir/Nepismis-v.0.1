@@ -44,6 +44,8 @@ public class Market_OrdersList_Adapter extends BaseExpandableListAdapter {
     // child data in format of header title, child title
     private HashMap<String, List<MarkerOrdes.struct_market_order_details>> _listDataChild;
 
+    private double total_price = 0.0;
+
     public Market_OrdersList_Adapter(Context context, List<String> listDataHeader, HashMap<String, List<MarkerOrdes.struct_market_order_details>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
@@ -52,8 +54,7 @@ public class Market_OrdersList_Adapter extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
-                .get(childPosititon);
+        return this._listDataChild.get(this._listDataHeader.get(groupPosition)).get(childPosititon);
     }
 
     @Override
@@ -62,31 +63,49 @@ public class Market_OrdersList_Adapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final MarkerOrdes.struct_market_order_details  childText = (MarkerOrdes.struct_market_order_details) getChild(groupPosition, childPosition);
+        final MarkerOrdes.struct_market_order_details childText = (MarkerOrdes.struct_market_order_details) getChild(groupPosition, childPosition);
+
 
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this._context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_market_order_row_design, null);
+            LayoutInflater infalInflater = (LayoutInflater) this._context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+
+            if (isLastChild) {
+                total_price += (childText.order_price);
+
+                convertView = infalInflater.inflate(R.layout.list_market_order_row_design, null);
+                Button button = (Button) convertView.findViewById(R.id.btn_market_order_ready);
+               Button button_total_price = (Button) convertView.findViewById(R.id.btn_total_price);
+
+               button_total_price.setText("Toplam "+total_price + "tl");
+
+                total_price = 0;
+
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        market_send_order_ready(childText.order_id);
+                    }
+                });
+            } else {
+                convertView = infalInflater.inflate(R.layout.list_market_order_row_design_without_button, null);
+
+            }
         }
 
         TextView txtListChild_name = (TextView) convertView.findViewById(R.id.market_order_name);
         TextView txtListChild_price = (TextView) convertView.findViewById(R.id.txt_market_product_price);
         TextView txtListChild_count = (TextView) convertView.findViewById(R.id.txt_market_product_count);
-        LinearLayout lay = (LinearLayout) convertView.findViewById(R.id.market_order_layout);
-
-
 
         txtListChild_name.setText(childText.order_name);
-        txtListChild_price.setText(childText.order_price);
+        txtListChild_price.setText(""+childText.order_price);
         txtListChild_count.setText(childText.order_count);
 
-        if(!isLastChild){
-            lay.setVisibility(View.GONE);
-        }
+        total_price += (childText.order_price);
+
 
         return convertView;
     }
@@ -137,5 +156,9 @@ public class Market_OrdersList_Adapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    public void market_send_order_ready(String id) {
+        Toast.makeText(this._context, "Hazır Clicked" + id, Toast.LENGTH_SHORT).show();
     }
 }

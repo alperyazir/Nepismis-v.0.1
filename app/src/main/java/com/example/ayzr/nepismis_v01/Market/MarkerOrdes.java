@@ -118,6 +118,7 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
 
                             //s_d_list.clear();
                             List<struct_market_order_details> s_d_list = new ArrayList<struct_market_order_details>();
+
                             for (int j = 0; j < array_user.length(); j++) {
                                 JSONObject object_order = array_user.getJSONObject(j);
                                 JSONObject object_so = object_order.getJSONObject("urun");
@@ -127,7 +128,8 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
                                     listDataHeader.add(object_usr.getString("name"));
 
                                 struct_market_order_details s_d = new struct_market_order_details();
-                                s_d.order_price = "" + object_so.getDouble("urun_fiyat");
+                                s_d.order_id = ""+object_usr.getInt("id");
+                                s_d.order_price = object_so.getDouble("urun_fiyat");
                                 s_d.order_name = object_so.getString("urun_adi");
                                 s_d.order_count = object_order.getString("adet");
                                 s_d_list.add(s_d);
@@ -217,8 +219,9 @@ public class MarkerOrdes extends AppCompatActivity implements NavigationView.OnN
     }
 
     public static class struct_market_order_details {
+        public String order_id;
         public String order_name;
-        public String order_price;
+        public double order_price;
         public String order_count;
     }
 }
